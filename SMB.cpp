@@ -44,19 +44,13 @@ static int win = 0;
 
 /*global variables*/
 int KeyDown[256], SpecialDown[256];		//arrays to store keys for press/release checks
-int last_time = 0;	//variable for delta_time calculations
+int last_time = 0;						//variable for delta_time calculations
 float proj_pos[2] = {0.0f, 0.0f};		//projectile position, initially at the origin
-float proj_vel = 1.0f, AI_vel = 1.1f, player_vel = 1.0f;   //projectile velocity when fired and A.I. paddle velocity
+float proj_vel = 1.0f, AI_vel = 1.1f, player_vel = 1.0f;   //projectile velocity when fired and A.I. enemies' velocity
 float player[2] = {0.0f, 0.0f};			//player position, initially at the origin
-float crosshairs[2] = {0.0f, 0.0f};		//crosshairs position, initially at the origin
-int win_pos[2] = {0, 0};				//window position used for printing window coordinates
 float angle = 0.0;						//angle of the projectile between the crosshairs and the player
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
-int passed_through = 0;					//used as a boolean to determine whether or not the projectile has passed through the crosshairs
-float leftPadY = 0.0f, rightPadY = 0.0f;//sets Y coordinates of center of paddles
-int p_score = 0;							//player score
-bool isVelNeg = 0, server = 0;//booleans to keep track of direction of velocity and serve (0 for right, 1 for left)
-bool newGame = 0;//booleans to keep track of welcome and directions messages, and number of players
+int p_score = 0;						//player score
 
 int channel = -1;
 
@@ -250,32 +244,32 @@ void reset(void)
 /*change the angle when a collision occurs*/
 void newAngle(float padY, int side)
 {
-	float diff;
-	if(side == 0)//if we're dealing with the left paddle
-		diff = padY - proj_pos[1];
-	else if(side == 1)//if we're dealing with the right paddle
-		diff = proj_pos[1] - padY;
-	if(diff == 0)//avoid a divide-by-zero error
-	   diff = 0.00001;
-	float x = (0.135/diff) * 3;
-	float ang2 = (angle + (PI/x)) * -1;
-	/*keep angle between 0 and 2*PI for easier calculations*/
-	if(ang2 > (2*PI))
-		angle = ang2 - (2*PI);
-	else if(ang2 < 0)
-		angle = ang2 + (2*PI);
-	else
-		angle = ang2 * -1;
+	//float diff;
+	//if(side == 0)//if we're dealing with the left paddle
+	//	diff = padY - proj_pos[1];
+	//else if(side == 1)//if we're dealing with the right paddle
+	//	diff = proj_pos[1] - padY;
+	//if(diff == 0)//avoid a divide-by-zero error
+	//   diff = 0.00001;
+	//float x = (0.135/diff) * 3;
+	//float ang2 = (angle + (PI/x)) * -1;
+	///*keep angle between 0 and 2*PI for easier calculations*/
+	//if(ang2 > (2*PI))
+	//	angle = ang2 - (2*PI);
+	//else if(ang2 < 0)
+	//	angle = ang2 + (2*PI);
+	//else
+	//	angle = ang2 * -1;
 
-	/*limit the angle of the ball to +/- 60 degrees from the horizontal*/
-	if(angle > (PI/3) && angle <= PI && isVelNeg == 0)
-		angle = PI/3;
-	else if(angle < ((5*PI)/3) && angle >= PI && isVelNeg == 0)
-		angle = (5*PI)/3;
-	else if(angle < ((2*PI)/3) && angle >= 0 && isVelNeg == 1)
-		angle = (2*PI)/2.75;
-	else if(angle > ((4*PI)/3) && angle <= (2*PI) && isVelNeg == 1)
-		angle = (4*PI)/3;
+	///*limit the angle of the ball to +/- 60 degrees from the horizontal*/
+	//if(angle > (PI/3) && angle <= PI && isVelNeg == 0)
+	//	angle = PI/3;
+	//else if(angle < ((5*PI)/3) && angle >= PI && isVelNeg == 0)
+	//	angle = (5*PI)/3;
+	//else if(angle < ((2*PI)/3) && angle >= 0 && isVelNeg == 1)
+	//	angle = (2*PI)/2.75;
+	//else if(angle > ((4*PI)/3) && angle <= (2*PI) && isVelNeg == 1)
+	//	angle = (4*PI)/3;
 }
 
 /*update the projectile's position*/
