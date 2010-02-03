@@ -49,8 +49,10 @@ float proj_pos[2] = {0.0f, 0.0f};		//projectile position, initially at the origi
 float proj_vel = 1.0f, AI_vel = 1.1f, player_vel = 1.0f;   //projectile velocity when fired and A.I. enemies' velocity
 float player[2] = {0.0f, 0.0f};			//player position, initially at the origin
 float angle = 0.0;						//angle of the projectile between the crosshairs and the player
+float overallTime = 0.0f;				//keep track of overall time elapsed for various functions
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
+bool jumping = 0;
 
 int channel = -1;
 
@@ -216,6 +218,12 @@ void smoothMoves(float delta_seconds)
 	//}
 }
 
+void jump(float delta_seconds)
+{
+	/*i don't freakin know*/
+	jumping = 0;
+}
+
 /*display function which calls rendering functions for objects in the scene*/
 void display()
 {
@@ -280,12 +288,18 @@ void idle()
 	float delta_seconds = 0.001f*elapsed;
 	last_time = time;
 
+	overallTime = time * .001f;
+
 	//proj_pos[0] += proj_vel * moving * cos(angle)*delta_seconds;
 	//proj_pos[1] += proj_vel * moving * sin(angle)*delta_seconds;
 
-	//if(onePlayer == 1)
-		//AI(delta_seconds);
+	
+	//printf("player[1] = %f\n", player[1]);
+	printf("overallTime = %f\n", overallTime);
+
 	smoothMoves(delta_seconds);
+	if(jumping == 1)
+		jump(delta_seconds);
 
     glutPostRedisplay();
 }
@@ -358,6 +372,8 @@ void keyboard(unsigned char key, int x, int y)
 
 		case 32: //ASCII for Space Bar
 			/*figure out how to make character jump*/
+			if(jumping == 0)
+				jumping = 1;
 			break;
 		case 13: //ASCII for Enter
 			/*?*/
