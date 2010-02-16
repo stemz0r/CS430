@@ -46,13 +46,13 @@ static int win = 0;
 int KeyDown[256], SpecialDown[256];		//arrays to store keys for press/release checks
 int last_time = 0;						//variable for delta_time calculations
 float proj_pos[2] = {0.0f, 0.0f};		//projectile position, initially at the origin
-float proj_vel = 1.0f, AI_vel = 1.1f, player_vel = 1.0f;   //projectile velocity when fired and A.I. enemies' velocity
+float proj_vel = 1.0f, AI_vel = 1.1f, player_vel = 0.01f;   //projectile velocity when fired and A.I. enemies' velocity
 float player[2] = {0.0f, 0.0f};			//player position, initially at the origin
 float angle = 0.0;						//angle of the projectile between the crosshairs and the player
 float overallTime = 0.0f;				//keep track of overall time elapsed for various functions
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
-bool jumping = 0;
+bool jumping = 0, dir = 0;				//direction determined by 0 (left) and 1 (right)
 
 int channel = -1;
 
@@ -211,10 +211,36 @@ void smoothMoves(float delta_seconds)
         player[0] -= player_vel * delta_seconds;
 	if(onePlayer == 0)
 	{*/
-	if ( SpecialDown[GLUT_KEY_RIGHT] )
+	if ( SpecialDown[GLUT_KEY_RIGHT] ) 
+	{
+		dir = 1;
+		if(player_vel < 1.0)
+			player_vel += 2 * delta_seconds;
 		player[0] += player_vel * delta_seconds;
+	}
 	if( SpecialDown[GLUT_KEY_LEFT] )
+	{
+		dir = 0;
+		if(player_vel < 1.0)
+			player_vel += 2 * delta_seconds;
 		player[0] -= player_vel * delta_seconds;
+	}
+	if(!SpecialDown[GLUT_KEY_RIGHT] && dir == 1)//player was moving right then stopped
+	{
+		if(player_vel > 0.02)
+		{
+			player_vel -= 2 * delta_seconds;
+			player[0] += player_vel * delta_seconds;
+		}
+	}
+	if(!SpecialDown[GLUT_KEY_LEFT] && dir == 0)//player was moving left then stopped
+	{
+		if(player_vel > 0.02)
+		{
+			player_vel -= 2 * delta_seconds;
+			player[0] -= player_vel * delta_seconds;
+		}
+	}
 	//}
 }
 
@@ -281,7 +307,7 @@ void newAngle(float padY, int side)
 }
 
 /*update the projectile's position*/
-void idle()
+void idle(void)
 {
 	int time = glutGet(GLUT_ELAPSED_TIME);
 	int elapsed = time-last_time;
