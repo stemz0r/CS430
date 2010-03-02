@@ -360,8 +360,8 @@ void CreateGlutWindow()
 
    /*WINDOW MODE (COMMEND OUT FULLSCREEN MODE AND UNCOMMENT THIS TO USE WINDOW MODE)*/
    //glutInitWindowPosition (5, 5);
-   //glutInitWindowSize (1024, 768); //changed window size to 1024x768
-   //win = glutCreateWindow ("Ponger");
+   //glutInitWindowSize (800, 600); //changed window size to 1024x768
+   //win = glutCreateWindow ("Super Mountaineer Brothers");
 
    /*FULLSCREEN MODE (COMMENT OUT WINDOW MODE AND UNCOMMENT THIS TO USE FULLSCREEN MODE)*/
    glutGameModeString( "1024x600:32@60" ); //the settings for fullscreen mode for netbooks
