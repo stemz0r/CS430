@@ -41,13 +41,19 @@ void newAngle(float, int);
 static int win = 0;
 
 #define PI 3.1415926535897932384
+#define LEFT 0
+#define RIGHT 1
 
 /*global variables*/
 int KeyDown[256], SpecialDown[256];		//arrays to store keys for press/release checks
 int last_time = 0;						//variable for delta_time calculations
 float proj_pos[2] = {0.0f, 0.0f};		//projectile position, initially at the origin
-float proj_vel = 1.0f, AI_vel = 1.1f, player_vel = 0.01f;   //projectile velocity when fired and A.I. enemies' velocity
-float player[2] = {0.0f, 0.0f};			//player position, initially at the origin
+float proj_vel = 1.0f, AI_vel = 0.3f, player_vel = 0.01f;   //projectile velocity when fired and A.I. enemies' velocity
+float player[2] = {1.1f, -0.6f};			//player position, initially at the origin
+float camera[2] = {1.5f, 0.0f};			//camera position, initially at the origin
+float score[2] = {1.6f, 0.7f};			//score position, initially in top right of first screen
+float AI_pos[5][2] = {{5.0f, -0.7f}, {14.0f, -0.7f}, {15.0f, -0.7f}, {20.0f, -0.7f}, {28.0f, -0.7f}};		//initial enemy positions
+int AI_dir[5] = {LEFT, LEFT, LEFT, LEFT, LEFT}; //initial enemy movement directions
 float angle = 0.0;						//angle of the projectile between the crosshairs and the player
 float overallTime = 0.0f;				//keep track of overall time elapsed for various functions
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
@@ -75,10 +81,10 @@ void drawScene(void)
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glBegin(GL_QUADS);
 		/*ground*/
-		glVertex3f(-1.0f, -0.8f, 0.0f);
-		glVertex3f(-1.0f, -1.0f, 0.0f);
-		glVertex3f(10.0f, -1.0f, 0.0f);
-		glVertex3f(10.0f, -0.8f, 0.0f);
+		glVertex3f(0.0f, -0.8f, 0.0f);
+		glVertex3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(40.0f, -1.0f, 0.0f);
+		glVertex3f(40.0f, -0.8f, 0.0f);
 	glEnd();
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_QUADS);
@@ -95,26 +101,156 @@ void drawPlayer(void)
 	/*player is just a quad for now, will change later*/
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_QUADS);
-		glVertex3f(-0.8f + player[0], -0.8f + player[1], 0.0f);
-		glVertex3f(-0.8f + player[0], -0.4f + player[1], 0.0f);
-		glVertex3f(-0.7f + player[0], -0.4f + player[1], 0.0f);
-		glVertex3f(-0.7f + player[0], -0.8f + player[1], 0.0f);
+		glVertex3f(-0.05f + player[0], -0.2f + player[1], 0.0f);
+		glVertex3f(-0.05f + player[0], 0.2f + player[1], 0.0f);
+		glVertex3f(0.05f + player[0], 0.2f + player[1], 0.0f);
+		glVertex3f(0.05f + player[0], -0.2f + player[1], 0.0f);
 	glEnd();
+}
+
+void drawPlatforms(void)
+{
+	glColor3f(1.0f, 0.0f, 1.0f);
+	glBegin(GL_QUADS);
+		glVertex3f(4.0f, -0.2f, 0.0f);
+		glVertex3f(4.5f, -0.2f, 0.0f);
+		glVertex3f(4.5f, -0.1f, 0.0f);
+		glVertex3f(4.0f, -0.1f, 0.0f);
+
+		glVertex3f(5.0f, -0.2f, 0.0f);
+		glVertex3f(5.5f, -0.2f, 0.0f);
+		glVertex3f(5.5f, -0.1f, 0.0f);
+		glVertex3f(5.0f, -0.1f, 0.0f);
+
+		glVertex3f(4.5f, 0.4f, 0.0f);
+		glVertex3f(5.0f, 0.4f, 0.0f);
+		glVertex3f(5.0f, 0.3f, 0.0f);
+		glVertex3f(4.5f, 0.3f, 0.0f);
+	glEnd();
+
+	glPushMatrix();
+	glScalef(0.5f, 0.1f, 0.1f);
+	glTranslatef(3.0f, 0.0f, 0.0f);
+	glRotatef(10.0f, 1.0f, 0.0f, 0.0f);
+	glutSolidCube(1);
+	glPopMatrix();
+}
+
+void renderAI(void)
+{
+	glColor3f(0.6f, 0.6f, 0.6f);
+	glBegin(GL_QUADS);
+		glVertex3f(AI_pos[0][0] + 0.05, AI_pos[0][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[0][0] - 0.05, AI_pos[0][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[0][0] - 0.05, AI_pos[0][1] - 0.1, 0.0f);
+		glVertex3f(AI_pos[0][0] + 0.05, AI_pos[0][1] - 0.1, 0.0f);
+
+		glVertex3f(AI_pos[1][0] + 0.05, AI_pos[1][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[1][0] - 0.05, AI_pos[1][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[1][0] - 0.05, AI_pos[1][1] - 0.1, 0.0f);
+		glVertex3f(AI_pos[1][0] + 0.05, AI_pos[1][1] - 0.1, 0.0f);
+
+		glVertex3f(AI_pos[2][0] + 0.05, AI_pos[2][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[2][0] - 0.05, AI_pos[2][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[2][0] - 0.05, AI_pos[2][1] - 0.1, 0.0f);
+		glVertex3f(AI_pos[2][0] + 0.05, AI_pos[2][1] - 0.1, 0.0f);
+
+		glVertex3f(AI_pos[3][0] + 0.05, AI_pos[3][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[3][0] - 0.05, AI_pos[3][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[3][0] - 0.05, AI_pos[3][1] - 0.1, 0.0f);
+		glVertex3f(AI_pos[3][0] + 0.05, AI_pos[3][1] - 0.1, 0.0f);
+
+		glVertex3f(AI_pos[4][0] + 0.05, AI_pos[4][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[4][0] - 0.05, AI_pos[4][1] + 0.1, 0.0f);
+		glVertex3f(AI_pos[4][0] - 0.05, AI_pos[4][1] - 0.1, 0.0f);
+		glVertex3f(AI_pos[4][0] + 0.05, AI_pos[4][1] - 0.1, 0.0f);
+	glEnd();
+		
 }
 
 /*Artificial Intelligence code for computer paddle in 1-player games*/
 void AI(float delta_seconds)
 {
-   //if(moving==1)//if the ball is moving
-   //{
-	  // if(isVelNeg==0)//if the ball is moving towards the computer paddle (on the right)
-	  // {
-		 //  if(rightPadY - proj_pos[1] > 0.05)
-			//   rightPadY -= AI_vel * delta_seconds;
-		 //  else if(rightPadY - proj_pos[1] < -0.05)
-			//   rightPadY += AI_vel * delta_seconds;
-	  // }
-   //}
+	//enemy 1
+	if(AI_pos[0][0] >= 1.0 && AI_dir[0] == LEFT)
+		AI_pos[0][0] -= AI_vel * delta_seconds;
+	else if(AI_pos[0][0] < 1.0 && AI_dir[0] == LEFT)
+	{
+		AI_dir[0] = RIGHT;
+		AI_pos[0][0] = 1.0;
+	}
+	else if(AI_pos[0][0] <= 10.0 && AI_dir[0] == RIGHT)
+		AI_pos[0][0] += AI_vel* delta_seconds;
+	else if(AI_pos[0][0] > 10.0 && AI_dir[0] == RIGHT)
+	{
+		AI_dir[0] = LEFT;
+		AI_pos[0][0] = 10.0;
+	}
+
+	//enemy 2
+	if(AI_pos[1][0] >= 12.0 && AI_dir[1] == LEFT)
+		AI_pos[1][0] -= AI_vel * delta_seconds;
+	else if(AI_pos[1][0] < 12.0 && AI_dir[1] == LEFT)
+	{
+		AI_dir[1] = RIGHT;
+		AI_pos[1][0] = 12.0;
+	}
+	else if(AI_pos[1][0] <= 18.0 && AI_dir[1] == RIGHT)
+		AI_pos[1][0] += AI_vel* delta_seconds;
+	else if(AI_pos[1][0] > 18.0 && AI_dir[1] == RIGHT)
+	{
+		AI_dir[1] = LEFT;
+		AI_pos[1][0] = 18.0;
+	}
+
+	//enemy 3
+	if(AI_pos[2][0] >= 12.0 && AI_dir[2] == LEFT)
+		AI_pos[2][0] -= AI_vel * delta_seconds;
+	else if(AI_pos[2][0] < 12.0 && AI_dir[2] == LEFT)
+	{
+		AI_dir[2] = RIGHT;
+		AI_pos[2][0] = 12.0;
+	}
+	else if(AI_pos[2][0] <= 18.0 && AI_dir[2] == RIGHT)
+		AI_pos[2][0] += AI_vel* delta_seconds;
+	else if(AI_pos[2][0] > 18.0 && AI_dir[2] == RIGHT)
+	{
+		AI_dir[2] = LEFT;
+		AI_pos[2][0] = 18.0;
+	}
+
+	//enemy 4
+	if(AI_pos[3][0] >= 19.0 && AI_dir[3] == LEFT)
+		AI_pos[3][0] -= AI_vel * delta_seconds;
+	else if(AI_pos[3][0] < 19.0 && AI_dir[3] == LEFT)
+	{
+		AI_dir[3] = RIGHT;
+		AI_pos[3][0] = 19.0;
+	}
+	else if(AI_pos[3][0] <= 25.0 && AI_dir[3] == RIGHT)
+		AI_pos[3][0] += AI_vel* delta_seconds;
+	else if(AI_pos[3][0] > 25.0 && AI_dir[3] == RIGHT)
+	{
+		AI_dir[3] = LEFT;
+		AI_pos[3][0] = 25.0;
+	}
+
+	//enemy 5
+	if(AI_pos[4][0] >= 26.0 && AI_dir[4] == LEFT)
+		AI_pos[4][0] -= AI_vel * delta_seconds;
+	else if(AI_pos[4][0] < 26.0 && AI_dir[4] == LEFT)
+	{
+		AI_dir[4] = RIGHT;
+		AI_pos[4][0] = 26.0;
+	}
+	else if(AI_pos[4][0] <= 32.0 && AI_dir[4] == RIGHT)
+		AI_pos[4][0] += AI_vel* delta_seconds;
+	else if(AI_pos[4][0] > 32.0 && AI_dir[4] == RIGHT)
+	{
+		AI_dir[4] = LEFT;
+		AI_pos[4][0] = 32.0;
+	}
+
 }
 
 /*boundary testing for various aspects of the game as defined below*/
@@ -196,21 +332,35 @@ void boundaryTests(void)
 /*define what text to be drawn to the screen, including directions and scores*/
 void printToScreen(void)
 {
-   char Score[100];
-   sprintf(Score, "%d", p_score);
-   glColor3f(0.0f, 1.0f, 0.0f);
-   DrawText(0.7f, 0.7f, 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Score);
+    score[0] = camera[0] + 0.6;
+    char Score[100];
+    sprintf(Score, "%d", p_score);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    DrawText(score[0], score[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Score);
+}
+
+/*when the player approaches the side of the screen, scroll the camera*/
+void moveCamera(void)
+{
+	if(player[0] < 0.8)
+		camera[0] = 1.0;
+	else
+	{
+		if(((camera[0] + 1) - player[0]) < 0.8)//when the player approaches the right side of the current window
+			camera[0] = player[0] - 0.2;
+		else if((player[0] - (camera[0] - 1)) < 0.8)//when the player approaches the left side of the current window
+			camera[0] = player[0] + 0.2;
+	}
+		//move the camera
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(-camera[0], 0.0f, 0.0f);
+	printf("camera[0] = %f\n", camera[0]);
 }
 
 /*generate smooth keyboard-based movement*/
 void smoothMoves(float delta_seconds)
 {
-	/*if ( KeyDown['d'] || KeyDown['D'] )
-        player[0] += player_vel * delta_seconds;
-	if ( KeyDown['a'] || KeyDown['A'] )
-        player[0] -= player_vel * delta_seconds;
-	if(onePlayer == 0)
-	{*/
 	if ( SpecialDown[GLUT_KEY_RIGHT] ) 
 	{
 		dir = 1;
@@ -223,7 +373,10 @@ void smoothMoves(float delta_seconds)
 		dir = 0;
 		if(player_vel < 1.0)
 			player_vel += 2 * delta_seconds;
-		player[0] -= player_vel * delta_seconds;
+		if(player[0] < 0.1)
+			player[0] = 0.1;
+		else
+			player[0] -= player_vel * delta_seconds;
 	}
 	if(!SpecialDown[GLUT_KEY_RIGHT] && dir == 1)//player was moving right then stopped
 	{
@@ -238,9 +391,13 @@ void smoothMoves(float delta_seconds)
 		if(player_vel > 0.02)
 		{
 			player_vel -= 2 * delta_seconds;
-			player[0] -= player_vel * delta_seconds;
+			if(player[0] < 0.1)
+				player[0] = 0.1;
+			else
+				player[0] -= player_vel * delta_seconds;
 		}
 	}
+	//printf("player[0] = %f\n", player[0]);
 	//}
 }
 
@@ -257,7 +414,10 @@ void display()
 
 	/*RENDER OBJECTS IN SCENE*/
 	drawScene();
+	drawPlatforms();
 	drawPlayer();
+	renderAI();
+	moveCamera();
 	/*PERFORM BOUNDARY TESTING*/
 	boundaryTests();
     /*PRINT SCORES AND DIRECTIONS TO SCREEN*/
@@ -321,9 +481,9 @@ void idle(void)
 
 	
 	//printf("player[1] = %f\n", player[1]);
-	printf("overallTime = %f\n", overallTime);
 
 	smoothMoves(delta_seconds);
+	AI(delta_seconds);
 	if(jumping == 1)
 		jump(delta_seconds);
 
@@ -359,19 +519,19 @@ void CreateGlutWindow()
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGBA);
 
    /*WINDOW MODE (COMMEND OUT FULLSCREEN MODE AND UNCOMMENT THIS TO USE WINDOW MODE)*/
-   //glutInitWindowPosition (5, 5);
-   //glutInitWindowSize (800, 600); //changed window size to 1024x768
-   //win = glutCreateWindow ("Super Mountaineer Brothers");
+   glutInitWindowPosition (5, 5);
+   glutInitWindowSize (800, 600); //changed window size to 1024x768
+   win = glutCreateWindow ("Super Mountaineer Brothers");
 
    /*FULLSCREEN MODE (COMMENT OUT WINDOW MODE AND UNCOMMENT THIS TO USE FULLSCREEN MODE)*/
-   glutGameModeString( "1024x600:32@60" ); //the settings for fullscreen mode for netbooks
-	if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)) 
-		glutEnterGameMode();
-	else
-	{
-		glutGameModeString("1024x768:32@60");//the settings for fullscreen mode for regular displays
-		glutEnterGameMode();
-	}
+ //  glutGameModeString( "1024x600:32@60" ); //the settings for fullscreen mode for netbooks
+	//if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)) 
+	//	glutEnterGameMode();
+	//else
+	//{
+	//	glutGameModeString("1024x768:32@60");//the settings for fullscreen mode for regular displays
+	//	glutEnterGameMode();
+	//}
 		
 	ShowCursor(FALSE); //hides the mouse cursor
 }
