@@ -135,7 +135,33 @@ void drawPlatforms(void)
 	glPopMatrix();
 }
 
-void renderAI(void)
+void drawObjects(void)
+{
+	glColor3f(0.5f, 0.0f, 1.0f);
+	glBegin(GL_QUADS);
+		glVertex3f(10.0f, -0.8f, 0.0f);
+		glVertex3f(12.0f, -0.8f, 0.0f);
+		glVertex3f(12.0f, -0.55f, 0.0f);
+		glVertex3f(10.0f, -0.55f, 0.0f);
+
+		glVertex3f(18.0f, -0.8f, 0.0f);
+		glVertex3f(19.0f, -0.8f, 0.0f);
+		glVertex3f(19.0f, -0.35f, 0.0f);
+		glVertex3f(18.0f, -0.35f, 0.0f);
+
+		glVertex3f(25.0f, -0.8f, 0.0f);
+		glVertex3f(26.0f, -0.8f, 0.0f);
+		glVertex3f(26.0f, -0.35f, 0.0f);
+		glVertex3f(25.0f, -0.35f, 0.0f);
+
+		glVertex3f(32.0f, -0.8f, 0.0f);
+		glVertex3f(34.0f, -0.8f, 0.0f);
+		glVertex3f(34.0f, -0.55f, 0.0f);
+		glVertex3f(32.0f, -0.55f, 0.0f);
+	glEnd();
+}
+
+void drawEnemies(void)
 {
 	glColor3f(0.6f, 0.6f, 0.6f);
 	glBegin(GL_QUADS);
@@ -178,76 +204,76 @@ void AI(float delta_seconds)
 		AI_dir[0] = RIGHT;
 		AI_pos[0][0] = 1.0;
 	}
-	else if(AI_pos[0][0] <= 10.0 && AI_dir[0] == RIGHT)
+	else if(AI_pos[0][0] <= 9.95 && AI_dir[0] == RIGHT)
 		AI_pos[0][0] += AI_vel* delta_seconds;
-	else if(AI_pos[0][0] > 10.0 && AI_dir[0] == RIGHT)
+	else if(AI_pos[0][0] > 9.95 && AI_dir[0] == RIGHT)
 	{
 		AI_dir[0] = LEFT;
-		AI_pos[0][0] = 10.0;
+		AI_pos[0][0] = 9.95;
 	}
 
 	//enemy 2
-	if(AI_pos[1][0] >= 12.0 && AI_dir[1] == LEFT)
+	if(AI_pos[1][0] >= 12.05 && AI_dir[1] == LEFT)
 		AI_pos[1][0] -= AI_vel * delta_seconds;
-	else if(AI_pos[1][0] < 12.0 && AI_dir[1] == LEFT)
+	else if(AI_pos[1][0] < 12.05 && AI_dir[1] == LEFT)
 	{
 		AI_dir[1] = RIGHT;
-		AI_pos[1][0] = 12.0;
+		AI_pos[1][0] = 12.05;
 	}
-	else if(AI_pos[1][0] <= 18.0 && AI_dir[1] == RIGHT)
+	else if(AI_pos[1][0] <= 17.95 && AI_dir[1] == RIGHT)
 		AI_pos[1][0] += AI_vel* delta_seconds;
-	else if(AI_pos[1][0] > 18.0 && AI_dir[1] == RIGHT)
+	else if(AI_pos[1][0] > 17.95 && AI_dir[1] == RIGHT)
 	{
 		AI_dir[1] = LEFT;
-		AI_pos[1][0] = 18.0;
+		AI_pos[1][0] = 17.95;
 	}
 
 	//enemy 3
-	if(AI_pos[2][0] >= 12.0 && AI_dir[2] == LEFT)
+	if(AI_pos[2][0] >= 12.05 && AI_dir[2] == LEFT)
 		AI_pos[2][0] -= AI_vel * delta_seconds;
-	else if(AI_pos[2][0] < 12.0 && AI_dir[2] == LEFT)
+	else if(AI_pos[2][0] < 12.05 && AI_dir[2] == LEFT)
 	{
 		AI_dir[2] = RIGHT;
-		AI_pos[2][0] = 12.0;
+		AI_pos[2][0] = 12.05;
 	}
-	else if(AI_pos[2][0] <= 18.0 && AI_dir[2] == RIGHT)
+	else if(AI_pos[2][0] <= 17.95 && AI_dir[2] == RIGHT)
 		AI_pos[2][0] += AI_vel* delta_seconds;
-	else if(AI_pos[2][0] > 18.0 && AI_dir[2] == RIGHT)
+	else if(AI_pos[2][0] > 17.95 && AI_dir[2] == RIGHT)
 	{
 		AI_dir[2] = LEFT;
-		AI_pos[2][0] = 18.0;
+		AI_pos[2][0] = 17.95;
 	}
 
 	//enemy 4
-	if(AI_pos[3][0] >= 19.0 && AI_dir[3] == LEFT)
+	if(AI_pos[3][0] >= 19.05 && AI_dir[3] == LEFT)
 		AI_pos[3][0] -= AI_vel * delta_seconds;
-	else if(AI_pos[3][0] < 19.0 && AI_dir[3] == LEFT)
+	else if(AI_pos[3][0] < 19.05 && AI_dir[3] == LEFT)
 	{
 		AI_dir[3] = RIGHT;
-		AI_pos[3][0] = 19.0;
+		AI_pos[3][0] = 19.05;
 	}
-	else if(AI_pos[3][0] <= 25.0 && AI_dir[3] == RIGHT)
+	else if(AI_pos[3][0] <= 24.95 && AI_dir[3] == RIGHT)
 		AI_pos[3][0] += AI_vel* delta_seconds;
-	else if(AI_pos[3][0] > 25.0 && AI_dir[3] == RIGHT)
+	else if(AI_pos[3][0] > 24.95 && AI_dir[3] == RIGHT)
 	{
 		AI_dir[3] = LEFT;
-		AI_pos[3][0] = 25.0;
+		AI_pos[3][0] = 24.95;
 	}
 
 	//enemy 5
-	if(AI_pos[4][0] >= 26.0 && AI_dir[4] == LEFT)
+	if(AI_pos[4][0] >= 26.05 && AI_dir[4] == LEFT)
 		AI_pos[4][0] -= AI_vel * delta_seconds;
-	else if(AI_pos[4][0] < 26.0 && AI_dir[4] == LEFT)
+	else if(AI_pos[4][0] < 26.05 && AI_dir[4] == LEFT)
 	{
 		AI_dir[4] = RIGHT;
-		AI_pos[4][0] = 26.0;
+		AI_pos[4][0] = 26.05;
 	}
-	else if(AI_pos[4][0] <= 32.0 && AI_dir[4] == RIGHT)
+	else if(AI_pos[4][0] <= 31.95 && AI_dir[4] == RIGHT)
 		AI_pos[4][0] += AI_vel* delta_seconds;
-	else if(AI_pos[4][0] > 32.0 && AI_dir[4] == RIGHT)
+	else if(AI_pos[4][0] > 31.95 && AI_dir[4] == RIGHT)
 	{
 		AI_dir[4] = LEFT;
-		AI_pos[4][0] = 32.0;
+		AI_pos[4][0] = 31.95;
 	}
 
 }
@@ -414,8 +440,9 @@ void display()
 	/*RENDER OBJECTS IN SCENE*/
 	drawScene();
 	drawPlatforms();
+	drawObjects();
 	drawPlayer();
-	renderAI();
+	drawEnemies();
 	moveCamera();
 	/*PERFORM BOUNDARY TESTING*/
 	boundaryTests();
