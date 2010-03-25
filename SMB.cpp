@@ -64,7 +64,7 @@ int channel = -1;
 Mix_Chunk* hit = NULL;
 Mix_Chunk* miss = NULL;
 
-/*initialize the sound effects*/
+/*initialize the sound effects (NEED TO CHANGE)*/
 void initSounds(void)
 {
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) != -1)
@@ -74,6 +74,7 @@ void initSounds(void)
 	}
 }
 
+/*render the basic scene: ground, background, etc*/
 void drawScene(void)
 {
 	/*figure out how to move the ground and the background with the player*/
@@ -95,6 +96,7 @@ void drawScene(void)
 	glEnd();
 }
 
+/*render the player*/
 void drawPlayer(void)
 {
 	/*player is just a quad for now, will change later*/
@@ -107,6 +109,7 @@ void drawPlayer(void)
 	glEnd();
 }
 
+/*draw the platforms in the scene above the ground*/
 void drawPlatforms(void)
 {
 	glColor3f(1.0f, 0.0f, 1.0f);
@@ -135,6 +138,7 @@ void drawPlatforms(void)
 	glPopMatrix();
 }
 
+/*draw objects and obstacles in the scene*/
 void drawObjects(void)
 {
 	glColor3f(0.5f, 0.0f, 1.0f);
@@ -161,6 +165,7 @@ void drawObjects(void)
 	glEnd();
 }
 
+/*render the enemies*/
 void drawEnemies(void)
 {
 	glColor3f(0.6f, 0.6f, 0.6f);
@@ -193,7 +198,7 @@ void drawEnemies(void)
 		
 }
 
-/*Artificial Intelligence code for computer paddle in 1-player games*/
+/*Artificial Intelligence code: enemies walk between static obstacles in the scene until they are killed*/
 void AI(float delta_seconds)
 {
 	//enemy 1
