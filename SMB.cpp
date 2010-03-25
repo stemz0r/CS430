@@ -61,7 +61,6 @@ int p_score = 0;						//player score
 bool jumping = 0, dir = 0;				//direction determined by 0 (left) and 1 (right)
 
 int channel = -1;
-
 Mix_Chunk* hit = NULL;
 Mix_Chunk* miss = NULL;
 
