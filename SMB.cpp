@@ -8,6 +8,8 @@ Adam Trainer
 v0.1
 */
 
+
+
 #ifdef WIN32
    #include <windows.h>
 #endif
@@ -37,12 +39,14 @@ using namespace std;
 void DrawText(float x, float y, float z, void* font, char* text);
 void reset(void);
 void newAngle(float, int);
+void jump(float delta_seconds);
 
 static int win = 0;
 
 #define PI 3.1415926535897932384
 #define LEFT 0
 #define RIGHT 1
+
 
 /*global variables*/
 int KeyDown[256], SpecialDown[256];		//arrays to store keys for press/release checks
@@ -364,7 +368,7 @@ void printToScreen(void)
 {
     score[0] = camera[0] + 0.6;
     char Score[100];
-    sprintf(Score, "%d", p_score);
+    sprintf_s(Score, "%d", p_score);
     glColor3f(0.0f, 1.0f, 0.0f);
     DrawText(score[0], score[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Score);
 }
@@ -408,6 +412,25 @@ void smoothMoves(float delta_seconds)
 		else
 			player[0] -= player_vel * delta_seconds;
 	}
+	if( SpecialDown[GLUT_KEY_UP] )
+	{
+		if(dir = 1){
+			if(player_vel < 1.0)
+				player_vel += 2 * delta_seconds;
+				player[0] += player_vel * delta_seconds;
+				player[1] += player_vel * delta_seconds;
+		}
+		if (dir = 0){
+			if(player_vel < 1.0)
+				player_vel += 2 * delta_seconds;
+				player[0] -= player_vel * delta_seconds;
+				player[1] += player_vel * delta_seconds;
+				
+		}
+
+
+	}
+	
 	if(!SpecialDown[GLUT_KEY_RIGHT] && dir == 1)//player was moving right then stopped
 	{
 		if(player_vel > 0.02)
@@ -427,14 +450,20 @@ void smoothMoves(float delta_seconds)
 				player[0] -= player_vel * delta_seconds;
 		}
 	}
-	//printf("player[0] = %f\n", player[0]);
-	//}
+	if(!SpecialDown[GLUT_KEY_UP] && player[1]>-0.6f)
+	{
+		while (player[1]>-0.6f)//eventually needs to take blocks into account, right now just the ground
+			player[1] -= (player_vel * delta_seconds);
+	}
 }
 
 void jump(float delta_seconds)
+
 {
 	/*i don't freakin know*/
-	jumping = 0;
+	//jumping = 0;
+	
+
 }
 
 /*display function which calls rendering functions for objects in the scene*/
@@ -515,8 +544,8 @@ void idle(void)
 
 	smoothMoves(delta_seconds);
 	AI(delta_seconds);
-	if(jumping == 1)
-		jump(delta_seconds);
+//	if(jumping == 1)
+//		jump(delta_seconds);
 
     glutPostRedisplay();
 }
