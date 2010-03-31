@@ -418,11 +418,12 @@ void smoothMoves(float delta_seconds)
 			if(player_vel < 1.0)
 				player_vel += 2 * delta_seconds;
 				player[0] += player_vel * delta_seconds;
-				player[1] += player_vel * delta_seconds;
+				while(player[1] <= 0.15f)
+					player[1] += .2 * delta_seconds;
 		}
 		if (dir = 0){
 			if(player_vel < 1.0)
-				player_vel += 2 * delta_seconds;
+				//player_vel += 2 * delta_seconds;
 				player[0] -= player_vel * delta_seconds;
 				player[1] += player_vel * delta_seconds;
 				
@@ -452,8 +453,9 @@ void smoothMoves(float delta_seconds)
 	}
 	if(!SpecialDown[GLUT_KEY_UP] && player[1]>-0.6f)
 	{
-		while (player[1]>-0.6f)//eventually needs to take blocks into account, right now just the ground
-			player[1] -= (player_vel * delta_seconds);
+		//eventually needs to take blocks into account, right now just the ground
+
+			player[1] -= (.5 * delta_seconds);
 	}
 }
 
