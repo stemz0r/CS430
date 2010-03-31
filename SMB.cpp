@@ -67,7 +67,64 @@ bool jumping = 0, dir = 0;				//direction determined by 0 (left) and 1 (right)
 int channel = -1;
 Mix_Chunk* hit = NULL;
 Mix_Chunk* miss = NULL;
+GLuint outline;
+GLuint mountaineer;
+int bX1 = -1;
+int bX2 = 3;
 
+GLuint LoadTextureRAW( const char * filename, int wrap )
+{
+    GLuint texture;
+    int width, height;
+    BYTE * data;
+    FILE * file;
+
+    // open texture data
+    file = fopen( filename, "rb" );
+    if ( file == NULL ) return 0;
+
+    // allocate buffer
+    width = 512;
+    height = 512;
+    data = (BYTE *) malloc( width * height * 3 );
+
+    // read texture data
+    fread( data, width * height * 3, 1, file );
+    fclose( file );
+
+    // allocate a texture name
+    glGenTextures( 1, &texture );
+
+    // select our current texture
+    glBindTexture( GL_TEXTURE_2D, texture );
+
+    // select modulate to mix texture with color for shading
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+
+    // when texture area is small, bilinear filter the closest mipmap
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                     GL_LINEAR_MIPMAP_NEAREST  );
+    // when texture area is large, bilinear filter the first mipmap
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+    // if wrap is true, the texture wraps over at the edges (repeat)
+    //       ... false, the texture ends at the edges (clamp)
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                     wrap ? GL_REPEAT : GL_CLAMP );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+                     wrap ? GL_REPEAT : GL_CLAMP );
+
+    // build our texture mipmaps
+    gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height,
+                       GL_RGB, GL_UNSIGNED_BYTE, data );
+
+	//glTexImage2D(GL_TEXTURE_2D, 1, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture_image);
+
+    // free buffer
+    free( data );
+
+    return texture;
+}
 /*initialize the sound effects (NEED TO CHANGE)*/
 void initSounds(void)
 {
@@ -91,12 +148,20 @@ void drawScene(void)
 		glVertex3f(40.0f, -0.8f, 0.0f);
 	glEnd();
 	glColor3f(1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, outline);
 	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 1.0f);//Top Left
+	
 		/*background (will be textured later)*/
-		glVertex3f(-1.0f, -0.8f, 0.0f);
-		glVertex3f(-1.0f, 1.0f, 0.0f);
-		glVertex3f(10.0f, 1.0f, 0.0f);
-		glVertex3f(10.0f, -0.8f, 0.0f);
+		glVertex3f(camera[0] - 1, -0.8f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);     //Bottom Left
+		glVertex3f(camera[0] - 1, 1.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);//Bottom Right
+		
+		glVertex3f(camera[0] + 1, 1.0f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);//Top Right
+		glVertex3f(camera[0] + 1, -0.8f, 0.0f);
 	glEnd();
 }
 
@@ -104,13 +169,20 @@ void drawScene(void)
 void drawPlayer(void)
 {
 	/*player is just a quad for now, will change later*/
-	glColor3f(1.0f, 0.0f, 0.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//glBlendFunc (GL_ONE, GL_ONE);
+	glBindTexture(GL_TEXTURE_2D, mountaineer);
 	glBegin(GL_QUADS);
-		glVertex3f(-0.05f + player[0], -0.2f + player[1], 0.0f);
-		glVertex3f(-0.05f + player[0], 0.2f + player[1], 0.0f);
-		glVertex3f(0.05f + player[0], 0.2f + player[1], 0.0f);
-		glVertex3f(0.05f + player[0], -0.2f + player[1], 0.0f);
+	glTexCoord2f(0.0f, 1.0f);//Top Left
+		glVertex3f(-0.2f + player[0], -0.2f + player[1], 0.0f);
+	glTexCoord2f(0.0f, 0.0f);     //Bottom Left
+		glVertex3f(-0.2f + player[0], 0.2f + player[1], 0.0f);
+glTexCoord2f(1.0f, 0.0f);//Bottom Right
+		glVertex3f(0.2f + player[0], 0.2f + player[1], 0.0f);
+		glTexCoord2f(1.0f, 1.0f);//Top Right
+		glVertex3f(0.2f + player[0], -0.2f + player[1], 0.0f);
 	glEnd();
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 /*draw the platforms in the scene above the ground*/
@@ -388,7 +460,8 @@ void moveCamera(void)
 		//move the camera
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(-camera[0], 0.0f, 0.0f);
+	//if (camera[0] != 1.0)
+		glTranslatef(-camera[0], 0.0f, 0.0f);
 	printf("camera[0] = %f\n", camera[0]);
 }
 
@@ -438,11 +511,11 @@ void smoothMoves(float delta_seconds)
 		{
 			player_vel -= 2 * delta_seconds;
 			player[0] += player_vel * delta_seconds;
-		}
+		} 
 	}
 	if(!SpecialDown[GLUT_KEY_LEFT] && dir == 0)//player was moving left then stopped
 	{
-		if(player_vel > 0.02)
+		if(player_vel > 0.02 && player[0] >= .1)
 		{
 			player_vel -= 2 * delta_seconds;
 			if(player[0] < 0.1)
@@ -450,6 +523,7 @@ void smoothMoves(float delta_seconds)
 			else
 				player[0] -= player_vel * delta_seconds;
 		}
+
 	}
 	if(!SpecialDown[GLUT_KEY_UP] && player[1]>-0.6f)
 	{
@@ -646,6 +720,11 @@ void CreateGlutCallbacks()
 void InitOpenGL()
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f); //sets background to white
+	glEnable(GL_TEXTURE_2D);
+	outline = LoadTextureRAW("background.raw", 1);
+	mountaineer = LoadTextureRAW("man.raw", 1);
+	glEnable (GL_BLEND); 
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 /*main function*/
