@@ -63,6 +63,7 @@ float overallTime = 0.0f;				//keep track of overall time elapsed for various fu
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
 bool jumping = 0, dir = 0;				//direction determined by 0 (left) and 1 (right)
+float last_ground_position = -0.6f;
 
 int channel = -1;
 Mix_Chunk* hit = NULL;
@@ -414,18 +415,20 @@ void smoothMoves(float delta_seconds)
 	}
 	if( SpecialDown[GLUT_KEY_UP] )
 	{
-		if(dir = 1){
+		last_ground_position = -0.6f;//will need to address blocks once we have edge detection working
+		if(dir == 1){
 			if(player_vel < 1.0)
 				player_vel += 2 * delta_seconds;
 				player[0] += player_vel * delta_seconds;
-				while(player[1] <= 0.15f)
+				while(player[1] <= last_ground_position + 0.5f)
 					player[1] += .2 * delta_seconds;
 		}
-		if (dir = 0){
+		if (dir == 0){
 			if(player_vel < 1.0)
-				//player_vel += 2 * delta_seconds;
+				player_vel += 2 * delta_seconds;
 				player[0] -= player_vel * delta_seconds;
-				player[1] += player_vel * delta_seconds;
+				while(player[1] <= last_ground_position + 0.5f)
+					player[1] += .2 * delta_seconds;
 				
 		}
 
