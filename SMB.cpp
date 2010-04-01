@@ -63,7 +63,6 @@ float overallTime = 0.0f;				//keep track of overall time elapsed for various fu
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
 bool jumping = 0, dir = 0;				//direction determined by 0 (left) and 1 (right)
-float last_ground_position = -0.6f;
 
 int channel = -1;
 Mix_Chunk* hit = NULL;
@@ -72,6 +71,7 @@ GLuint outline;
 GLuint mountaineer;
 int bX1 = -1;
 int bX2 = 3;
+Mix_Music* music = NULL;
 
 GLuint LoadTextureRAW( const char * filename, int wrap )
 {
@@ -488,20 +488,18 @@ void smoothMoves(float delta_seconds)
 	}
 	if( SpecialDown[GLUT_KEY_UP] )
 	{
-		last_ground_position = -0.6f;//will need to address blocks once we have edge detection working
-		if(dir == 1){
+		if(dir = 1){
 			if(player_vel < 1.0)
 				player_vel += 2 * delta_seconds;
 				player[0] += player_vel * delta_seconds;
-				while(player[1] <= last_ground_position + 0.5f)
+				while(player[1] <= 0.15f)
 					player[1] += .2 * delta_seconds;
 		}
-		if (dir == 0){
+		if (dir = 0){
 			if(player_vel < 1.0)
-				player_vel += 2 * delta_seconds;
+				//player_vel += 2 * delta_seconds;
 				player[0] -= player_vel * delta_seconds;
-				while(player[1] <= last_ground_position + 0.5f)
-					player[1] += .2 * delta_seconds;
+				player[1] += player_vel * delta_seconds;
 				
 		}
 
@@ -728,6 +726,19 @@ void InitOpenGL()
 	mountaineer = LoadTextureRAW("man.raw", 1);
 	glEnable (GL_BLEND); 
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) != -1)
+	{
+		music = Mix_LoadMUS("Hail, West Virginia.wav");
+		if (Mix_PlayMusic(music, -1) == -1)
+		{
+			//return 2;
+		}
+
+		//if(Mix_PlayChannel(-1, effect, 0) == -1)
+		//{
+		//}
+
+	}
 }
 
 /*main function*/
