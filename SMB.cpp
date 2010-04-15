@@ -40,6 +40,7 @@ void DrawText(float x, float y, float z, void* font, char* text);
 void reset(void);
 void newAngle(float, int);
 void jump(float delta_seconds);
+void playerKilled(void);
 
 static int win = 0;
 
@@ -56,6 +57,7 @@ float proj_vel = 1.0f, AI_vel = 0.3f, player_vel = 0.01f;   //projectile velocit
 float player[2] = {1.1f, -0.6f};			//player position, initially at the origin
 float camera[2] = {1.5f, 0.0f};			//camera position, initially at the origin
 float score[2] = {1.6f, 0.7f};			//score position, initially in top right of first screen
+float lives[2] = {1.6f, 0.7f}; //number of lives position, initially in the top left of the screen
 float AI_pos[5][2] = {{5.0f, -0.7f}, {14.0f, -0.7f}, {15.0f, -0.7f}, {20.0f, -0.7f}, {28.0f, -0.7f}};		//initial enemy positions
 int AI_dir[5] = {LEFT, LEFT, LEFT, LEFT, LEFT}; //initial enemy movement directions
 float angle = 0.0;						//angle of the projectile between the crosshairs and the player
@@ -72,6 +74,10 @@ GLuint mountaineer;
 int bX1 = -1;
 int bX2 = 3;
 Mix_Music* music = NULL;
+
+int player_lives = 0;//counter for player lives
+bool powerup_enabled = 0;//bool value to show if the character is able to use powerups;
+
 
 GLuint LoadTextureRAW( const char * filename, int wrap )
 {
@@ -363,6 +369,20 @@ void AI(float delta_seconds)
 /*boundary testing for various aspects of the game as defined below*/
 void boundaryTests(void)
 {
+
+	if((player[1]<0))
+		playerKilled();
+
+}
+
+void playerKilled()//decrement lives/remove special items/whatever else the fuck you want this to do
+{
+	printf("dead");
+
+}
+
+
+
 	///*BOUNDARY TESTING (PONG BALL AND COURT)*/
  //  if(proj_pos[0] < -1.0)
  //  {
@@ -434,16 +454,22 @@ void boundaryTests(void)
 	//   //proj_vel *= 1.0325;
 	//   proj_vel += 0.075;
  //  }
-}
+//}
 
 /*define what text to be drawn to the screen, including directions and scores*/
 void printToScreen(void)
 {
     score[0] = camera[0] + 0.6;
     char Score[100];
-    sprintf_s(Score, "%d", p_score);
+	sprintf_s(Score, " Score : %d", p_score);
     glColor3f(0.0f, 1.0f, 0.0f);
     DrawText(score[0], score[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Score);
+
+	lives[0] = camera[0] - 0.8;
+    char Lives[100];
+	sprintf_s(Lives, " Lives : %d", player_lives);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    DrawText(lives[0], lives[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Lives);
 }
 
 /*when the player approaches the side of the screen, scroll the camera*/
@@ -488,21 +514,10 @@ void smoothMoves(float delta_seconds)
 	}
 	if( SpecialDown[GLUT_KEY_UP] )
 	{
-		if(dir = 1){
 			if(player_vel < 1.0)
-				player_vel += 2 * delta_seconds;
-				player[0] += player_vel * delta_seconds;
-				while(player[1] <= 0.15f)
-					player[1] += .2 * delta_seconds;
-		}
-		if (dir = 0){
-			if(player_vel < 1.0)
-				//player_vel += 2 * delta_seconds;
-				player[0] -= player_vel * delta_seconds;
-				player[1] += player_vel * delta_seconds;
-				
-		}
-
+				player_vel += 2 * delta_seconds; //allows jumping to happen while running, need to keep in here
+				while(player[1] <= 0.17f)
+					player[1] += .5 * delta_seconds;
 
 	}
 	
@@ -749,6 +764,7 @@ int main(int argc, char **argv)
 	initSounds();
 	CreateGlutCallbacks();
 	InitOpenGL();
+	player_lives = 3;//not sure if this should go here or not.
   
    glutMainLoop();
 
