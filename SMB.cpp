@@ -727,6 +727,15 @@ void keyboard(unsigned char key, int x, int y)
 		case 13: //ASCII for Enter
 			/*?*/
 			break;
+/*//tried to add jumping here, can't figure out how to get delta seconds into this function
+		case 38:
+				//put jumping stuff here
+						if(player_vel < 1.0)
+				player_vel += 2 * delta_seconds; //allows jumping to happen while running, need to keep in here
+				while(player[1] <= 0.17f)
+					player[1] += .5 * delta_seconds;
+			break;
+*/
 	}
 }
 
