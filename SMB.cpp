@@ -380,7 +380,7 @@ void playerKilled()//decrement lives/remove special items/whatever else the fuck
 {
 	if(player_lives<=0){
 		player_lives--;
-		powerup_enabled = 0;
+		reset();//places character back at origin
 	}else
 		gameOver();
 
@@ -593,10 +593,9 @@ void display()
 /*when a point is scored, reset the ball to the origin, reset the ball's velocity, and set the "is ball moving?" variable to false*/
 void reset(void)
 {
-	/*proj_pos[0] = 0.0;
-	proj_pos[1] = 0.0;
-	proj_vel = 1.0;
-	moving = 0;*/
+	powerup_enabled = 0;
+	player[0] = 1.1f;
+	player[1] = -0.6f;
 }
 
 /*change the angle when a collision occurs*/
