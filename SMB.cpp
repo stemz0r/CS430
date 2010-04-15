@@ -41,6 +41,7 @@ void reset(void);
 void newAngle(float, int);
 void jump(float delta_seconds);
 void playerKilled(void);
+void gameOver(void);
 
 static int win = 0;
 
@@ -377,7 +378,18 @@ void boundaryTests(void)
 
 void playerKilled()//decrement lives/remove special items/whatever else the fuck you want this to do
 {
-	printf("dead");
+	if(player_lives<=0){
+		player_lives--;
+		powerup_enabled = 0;
+	}else
+		gameOver();
+
+
+}
+
+void gameOver()
+{
+	//need to display a message to user saying game is over, then display main menu.
 
 }
 
