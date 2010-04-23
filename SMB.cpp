@@ -58,6 +58,7 @@ float proj_vel = 1.0f, AI_vel = 0.3f, player_vel = 0.01f;   //projectile velocit
 float player[2] = {1.1f, -0.6f};			//player position, initially at the origin
 float camera[2] = {1.5f, 0.0f};			//camera position, initially at the origin
 float score[2] = {1.6f, 0.7f};			//score position, initially in top right of first screen
+float end_game_message[2] = {1.6f, 0.7f};
 float lives[2] = {1.6f, 0.7f}; //number of lives position, initially in the top left of the screen
 float AI_pos[5][2] = {{5.0f, -0.7f}, {14.0f, -0.7f}, {15.0f, -0.7f}, {20.0f, -0.7f}, {28.0f, -0.7f}};		//initial enemy positions
 int AI_dir[5] = {LEFT, LEFT, LEFT, LEFT, LEFT}; //initial enemy movement directions
@@ -150,8 +151,37 @@ void drawScene(void)
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glBegin(GL_QUADS);
 		/*ground*/
+		//glVertex3f(0.0f, -0.8f, 0.0f);
+		//glVertex3f(0.0f, -1.0f, 0.0f);
+		//glVertex3f(40.0f, -1.0f, 0.0f);
+		//glVertex3f(40.0f, -0.8f, 0.0f);
+
 		glVertex3f(0.0f, -0.8f, 0.0f);
 		glVertex3f(0.0f, -1.0f, 0.0f);
+		glVertex3f(5.0f, -1.0f, 0.0f);
+		glVertex3f(5.0f, -0.8f, 0.0f);
+	glEnd();
+	glBegin(GL_QUADS);
+		glVertex3f(5.5f, -0.8f, 0.0f);
+		glVertex3f(5.5f, -1.0f, 0.0f);
+		glVertex3f(12.0f, -1.0f, 0.0f);
+		glVertex3f(12.0f, -0.8f, 0.0f);
+	glEnd();
+	glBegin(GL_QUADS);
+		glVertex3f(12.6f, -0.8f, 0.0f);
+		glVertex3f(12.6f, -1.0f, 0.0f);
+		glVertex3f(22.0f, -1.0f, 0.0f);
+		glVertex3f(22.0f, -0.8f, 0.0f);
+	glEnd();
+	glBegin(GL_QUADS);
+		glVertex3f(22.5f, -0.8f, 0.0f);
+		glVertex3f(22.5f, -1.0f, 0.0f);
+		glVertex3f(31.0f, -1.0f, 0.0f);
+		glVertex3f(31.0f, -0.8f, 0.0f);
+	glEnd();
+	glBegin(GL_QUADS);
+		glVertex3f(31.5f, -0.8f, 0.0f);
+		glVertex3f(31.5f, -1.0f, 0.0f);
 		glVertex3f(40.0f, -1.0f, 0.0f);
 		glVertex3f(40.0f, -0.8f, 0.0f);
 	glEnd();
@@ -371,12 +401,14 @@ void AI(float delta_seconds)
 void boundaryTests(void)
 {
 
-	if((player[1]<0))
+	if((player[1]< -1)) //if player falls down a hole
 		playerKilled();
+
+	// if player bumps into an enemy character, either decrement life or call playerKilled()
 
 }
 
-void playerKilled()//decrement lives/remove special items/whatever else the fuck you want this to do
+void playerKilled()//decrement lives/remove special items/whatever else
 {
 	if(player_lives<=0){
 		player_lives--;
@@ -390,6 +422,11 @@ void playerKilled()//decrement lives/remove special items/whatever else the fuck
 void gameOver()
 {
 	//need to display a message to user saying game is over, then display main menu.
+	end_game_message[0] = camera[0];
+    char EndGameMessage[100];
+	sprintf_s(EndGameMessage, " Game Over ");
+    glColor3f(0.0f, 1.0f, 0.0f);
+    DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndGameMessage);
 
 }
 
@@ -526,10 +563,13 @@ void smoothMoves(float delta_seconds)
 	}
 	if( SpecialDown[GLUT_KEY_UP] )
 	{
+		if(player[1]<= -0.6f)//we need to store last "standing" location, so we can jump off of platforms that are above the initial y-coord.
+		{
 			if(player_vel < 1.0)
 				player_vel += 2 * delta_seconds; //allows jumping to happen while running, need to keep in here
 				while(player[1] <= 0.17f)
-					player[1] += .5 * delta_seconds;
+					player[1] += .1 * delta_seconds;
+		}
 
 	}
 	
@@ -557,7 +597,7 @@ void smoothMoves(float delta_seconds)
 	{
 		//eventually needs to take blocks into account, right now just the ground
 
-			player[1] -= (.5 * delta_seconds);
+			player[1] -= (.6 * delta_seconds);
 	}
 }
 
