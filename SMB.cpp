@@ -147,6 +147,25 @@ void initSounds(void)
 /*render the basic scene: ground, background, etc*/
 void drawScene(void)
 {
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, outline);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 1.0f);//Top Left
+	
+		/*background (will be textured later)*/
+		glVertex3f(camera[0] - 1, -1.0f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);     //Bottom Left
+		glVertex3f(camera[0] - 1, 1.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);//Bottom Right
+		
+		glVertex3f(camera[0] + 1, 1.0f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);//Top Right
+		glVertex3f(camera[0] + 1, -1.0f, 0.0f);
+	glEnd();
+
+
+
 	/*figure out how to move the ground and the background with the player*/
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glBegin(GL_QUADS);
@@ -185,22 +204,7 @@ void drawScene(void)
 		glVertex3f(40.0f, -1.0f, 0.0f);
 		glVertex3f(40.0f, -0.8f, 0.0f);
 	glEnd();
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glBindTexture(GL_TEXTURE_2D, outline);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 1.0f);//Top Left
 	
-		/*background (will be textured later)*/
-		glVertex3f(camera[0] - 1, -0.8f, 0.0f);
-		
-		glTexCoord2f(0.0f, 0.0f);     //Bottom Left
-		glVertex3f(camera[0] - 1, 1.0f, 0.0f);
-		glTexCoord2f(1.0f, 0.0f);//Bottom Right
-		
-		glVertex3f(camera[0] + 1, 1.0f, 0.0f);
-		glTexCoord2f(1.0f, 1.0f);//Top Right
-		glVertex3f(camera[0] + 1, -0.8f, 0.0f);
-	glEnd();
 }
 
 /*render the player*/
