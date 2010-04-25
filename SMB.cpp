@@ -66,7 +66,7 @@ float angle = 0.0;						//angle of the projectile between the crosshairs and the
 float overallTime = 0.0f;				//keep track of overall time elapsed for various functions
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
-bool jumping = 0, dir = 0;				//direction determined by 0 (left) and 1 (right)
+bool isJumping = 0, dir = 0;				//direction determined by 0 (left) and 1 (right)
 
 int channel = -1;
 Mix_Chunk* hit = NULL;
@@ -139,8 +139,8 @@ void initSounds(void)
 {
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) != -1)
 	{
-		hit = Mix_LoadWAV("pong2.wav");
-		miss = Mix_LoadWAV("pongMiss.wav");
+		//hit = Mix_LoadWAV("pong2.wav");
+		//miss = Mix_LoadWAV("pongMiss.wav");
 	}
 }
 
@@ -166,7 +166,6 @@ void drawScene(void)
 
 
 
-	/*figure out how to move the ground and the background with the player*/
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glBegin(GL_QUADS);
 		/*ground*/
@@ -404,17 +403,34 @@ void AI(float delta_seconds)
 /*boundary testing for various aspects of the game as defined below*/
 void boundaryTests(void)
 {
+	printf("isJumping = %d\n", isJumping);
 
 	if((player[1]< -1)) //if player falls down a hole
 		playerKilled();
 
-	// if player bumps into an enemy character, either decrement life or call playerKilled()
+	//player-enemy collision detection
+	for(int i = 0; i < 5; i++) {
+		if((fabs(player[0] - AI_pos[i][0]) < 0.1) && (fabs(player[1] - AI_pos[i][1]) < 0.2))
+		{
+			playerKilled();
+		}
+	}
 
+	//player-hole collision detection
+	if(((player[0] > 5.0 && player[0] < 5.5) || (player[0] > 12.0 && player[0] < 12.6) || (player[0] > 22.0 && player[0] < 22.5) || (player[0] > 31.0 && player[0] < 31.5)) && isJumping == 0)
+	{
+		//fall animation
+	}
+
+	if(player[0] > 10.0 && player[0] < 10.2 && isJumping == 0 && dir == 1)
+		player[0] = 10.0;
+	if(player[0] < 12.0 && player[0] > 11.8 && isJumping == 0 && dir == 0)
+		player[0] = 12.0;
 }
 
 void playerKilled()//decrement lives/remove special items/whatever else
 {
-	if(player_lives<=0){
+	if(player_lives > 0){
 		player_lives--;
 		reset();//places character back at origin
 	}else
@@ -542,7 +558,7 @@ void moveCamera(void)
 	glLoadIdentity();
 	//if (camera[0] != 1.0)
 		glTranslatef(-camera[0], 0.0f, 0.0f);
-	printf("camera[0] = %f\n", camera[0]);
+	//printf("camera[0] = %f\n", camera[0]);
 }
 
 /*generate smooth keyboard-based movement*/
@@ -565,15 +581,17 @@ void smoothMoves(float delta_seconds)
 		else
 			player[0] -= player_vel * delta_seconds;
 	}
+
+	/*FIGURE OUT JUMPING*/
 	if( SpecialDown[GLUT_KEY_UP] )
 	{
-		if(player[1]<= -0.6f)//we need to store last "standing" location, so we can jump off of platforms that are above the initial y-coord.
-		{
+		//if(isJumping == 0) {
+			isJumping = 1;
 			if(player_vel < 1.0)
 				player_vel += 2 * delta_seconds; //allows jumping to happen while running, need to keep in here
-				while(player[1] <= 0.17f)
-					player[1] += .1 * delta_seconds;
-		}
+			if(player[1] <= 0.17f)//if we make this an if statement it could work with some tweaking
+				player[1] += delta_seconds;
+		//}
 
 	}
 	
@@ -601,7 +619,9 @@ void smoothMoves(float delta_seconds)
 	{
 		//eventually needs to take blocks into account, right now just the ground
 
-			player[1] -= (.6 * delta_seconds);
+			player[1] -= delta_seconds;
+			if(player[1] <= -0.6)
+				isJumping = 0;
 	}
 }
 
@@ -765,8 +785,8 @@ void keyboard(unsigned char key, int x, int y)
 
 		case 32: //ASCII for Space Bar
 			/*figure out how to make character jump*/
-			if(jumping == 0)
-				jumping = 1;
+			if(isJumping == 0)
+				isJumping = 1;
 			break;
 		case 13: //ASCII for Enter
 			/*?*/
