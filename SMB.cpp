@@ -48,6 +48,7 @@ static int win = 0;
 #define PI 3.1415926535897932384
 #define LEFT 0
 #define RIGHT 1
+#define JUMPHEIGHT 0.75
 
 
 /*global variables*/
@@ -56,6 +57,7 @@ int last_time = 0;						//variable for delta_time calculations
 float proj_pos[2] = {0.0f, 0.0f};		//projectile position, initially at the origin
 float proj_vel = 1.0f, AI_vel = 0.3f, player_vel = 0.01f;   //projectile velocity when fired and A.I. enemies' velocity
 float player[2] = {1.1f, -0.6f};			//player position, initially at the origin
+float currentPlayerHeight = -0.6f;			//current player height, used to keep track of whether or not the player is on an object
 float camera[2] = {1.5f, 0.0f};			//camera position, initially at the origin
 float score[2] = {1.6f, 0.7f};			//score position, initially in top right of first screen
 float end_game_message[2] = {1.6f, 0.7f};
@@ -66,7 +68,7 @@ float angle = 0.0;						//angle of the projectile between the crosshairs and the
 float overallTime = 0.0f;				//keep track of overall time elapsed for various functions
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
-bool isJumping = 0, dir = 0;				//direction determined by 0 (left) and 1 (right)
+bool isJumping = 0, dir = 0, onPlatform = 0;				//direction determined by 0 (left) and 1 (right)
 
 int channel = -1;
 Mix_Chunk* hit = NULL;
@@ -229,17 +231,17 @@ glTexCoord2f(1.0f, 0.0f);//Bottom Right
 /*draw the platforms in the scene above the ground*/
 void drawPlatforms(void)
 {
-	glColor3f(1.0f, 0.0f, 1.0f);
+	glColor3f(0.0f, 1.0f, 1.0f);
 	glBegin(GL_QUADS);
 		glVertex3f(4.0f, -0.2f, 0.0f);
 		glVertex3f(4.5f, -0.2f, 0.0f);
 		glVertex3f(4.5f, -0.1f, 0.0f);
 		glVertex3f(4.0f, -0.1f, 0.0f);
 
-		glVertex3f(5.0f, -0.2f, 0.0f);
 		glVertex3f(5.5f, -0.2f, 0.0f);
+		glVertex3f(6.0f, -0.2f, 0.0f);
+		glVertex3f(6.0f, -0.1f, 0.0f);
 		glVertex3f(5.5f, -0.1f, 0.0f);
-		glVertex3f(5.0f, -0.1f, 0.0f);
 
 		glVertex3f(4.5f, 0.4f, 0.0f);
 		glVertex3f(5.0f, 0.4f, 0.0f);
@@ -264,7 +266,7 @@ void drawObjects(void)
 		glVertex3f(12.0f, -0.8f, 0.0f);
 		glVertex3f(12.0f, -0.55f, 0.0f);
 		glVertex3f(10.0f, -0.55f, 0.0f);
-
+	
 		glVertex3f(18.0f, -0.8f, 0.0f);
 		glVertex3f(19.0f, -0.8f, 0.0f);
 		glVertex3f(19.0f, -0.35f, 0.0f);
@@ -401,7 +403,7 @@ void AI(float delta_seconds)
 }
 
 /*boundary testing for various aspects of the game as defined below*/
-void boundaryTests(void)
+void boundaryTests(float delta_seconds)
 {
 	printf("isJumping = %d\n", isJumping);
 
@@ -420,12 +422,18 @@ void boundaryTests(void)
 	if(((player[0] > 5.0 && player[0] < 5.5) || (player[0] > 12.0 && player[0] < 12.6) || (player[0] > 22.0 && player[0] < 22.5) || (player[0] > 31.0 && player[0] < 31.5)) && isJumping == 0)
 	{
 		//fall animation
+		player_vel = 0;
+		player[1] -= delta_seconds;
 	}
 
+	/*player-object collision detection*/
+	//first block
 	if(player[0] > 10.0 && player[0] < 10.2 && isJumping == 0 && dir == 1)
 		player[0] = 10.0;
 	if(player[0] < 12.0 && player[0] > 11.8 && isJumping == 0 && dir == 0)
 		player[0] = 12.0;
+
+	
 }
 
 void playerKilled()//decrement lives/remove special items/whatever else
@@ -435,12 +443,12 @@ void playerKilled()//decrement lives/remove special items/whatever else
 		reset();//places character back at origin
 	}else
 		gameOver();
-
-
-}
+		reset();
+	}
 
 void gameOver()
 {
+	player_lives = 3;
 	//need to display a message to user saying game is over, then display main menu.
 	end_game_message[0] = camera[0];
     char EndGameMessage[100];
@@ -564,6 +572,10 @@ void moveCamera(void)
 /*generate smooth keyboard-based movement*/
 void smoothMoves(float delta_seconds)
 {
+	if(player[1] > -0.6 && onPlatform == 0 && isJumping == 0)
+			player[1] -= delta_seconds;
+		if(player[1] <= -0.6)
+			currentPlayerHeight = player[1];
 	if ( SpecialDown[GLUT_KEY_RIGHT] ) 
 	{
 		dir = 1;
@@ -585,11 +597,13 @@ void smoothMoves(float delta_seconds)
 	/*FIGURE OUT JUMPING*/
 	if( SpecialDown[GLUT_KEY_UP] )
 	{
+		if(isJumping == 0)
+			currentPlayerHeight = player[1];
 		//if(isJumping == 0) {
 			isJumping = 1;
 			if(player_vel < 1.0)
 				player_vel += 2 * delta_seconds; //allows jumping to happen while running, need to keep in here
-			if(player[1] <= 0.17f)//if we make this an if statement it could work with some tweaking
+			if(player[1] <= (currentPlayerHeight + JUMPHEIGHT))//if we make this an if statement it could work with some tweaking
 				player[1] += delta_seconds;
 		//}
 
@@ -615,18 +629,123 @@ void smoothMoves(float delta_seconds)
 		}
 
 	}
-	if(!SpecialDown[GLUT_KEY_UP] && player[1]>-0.6f)
+
+	//checks to see if the player is landing on platforms, objects, enemies, or just the ground
+	if(!SpecialDown[GLUT_KEY_UP] && isJumping == 1)
 	{
-		//eventually needs to take blocks into account, right now just the ground
+		//when landing on blocks, remember to land player[0] 0.2 above the top
+		//of the blocks since player is 0.4 units tall and player[0] is measured from his center
 
 			player[1] -= delta_seconds;
-			if(player[1] <= -0.6)
-				isJumping = 0;
+
+			/*checks that see if the player is falling on an object*/
+			//object 1
+			if(player[0] > 10.0 && player[0] < 12.0 && player[1] > -0.34)
+			{
+				if(player[1] <= -0.35)
+				{
+					currentPlayerHeight = player[1];
+					onPlatform = 1;
+					isJumping = 0;
+				}
+			}
+			//object 2
+			else if(player[0] > 18.0 && player[0] < 19.0)
+			{
+				if(player[1] <= -0.15)
+				{
+					currentPlayerHeight = player[1];
+					onPlatform = 1;
+					isJumping = 0;
+				}
+			}
+			//object 3
+			else if(player[0] > 25.0 && player[0] < 26.0)
+			{
+				if(player[1] <= -0.15)
+				{
+					currentPlayerHeight = player[1];
+					onPlatform = 1;
+					isJumping = 0;
+				}
+			}
+			//object 4
+			else if(player[0] > 32.0 && player[0] < 34.0)
+			{
+				if(player[1] <= -0.35)
+				{
+					currentPlayerHeight = player[1];
+					onPlatform = 1;
+					isJumping = 0;
+				}
+			}
+
+			/*checks to see if the player is falling on a platform*/
+			//platform 1
+			else if(player[0] > 4.0 && player[0] < 4.5)
+			{
+				if(fabs(player[1] - 0.1) < 0.01)
+				{
+					currentPlayerHeight = player[1];
+					onPlatform = 1;
+					isJumping = 0;
+				}
+				else
+				{
+					onPlatform = 0;
+					if(player[1] <= -0.6)
+						isJumping = 0;
+				}
+			}
+			//platform 2
+			else if(player[0] > 4.5 && player[0] < 5.0)
+			{
+				if(fabs(player[1] - 0.6) < 0.01)
+				{
+					currentPlayerHeight = player[1];
+					isJumping = 0;
+				}
+				else
+				{
+					if(player[1] <= -0.6)
+					{
+						onPlatform = 0;
+						isJumping = 0;
+					}
+				}
+			}
+			//platform 3
+			else if(player[0] > 5.5 && player[0] < 6.0)
+			{
+				if(fabs(player[1] - 0.1) < 0.01)
+				{
+					currentPlayerHeight = player[1];
+					isJumping = 0;
+				}
+				else
+				{
+					//isJumping = 1;
+					if(player[1] <= -0.6)
+					{
+						onPlatform = 0;
+						isJumping = 0;
+					}
+				}
+			}			
+			
+			/*if the player isn't above anything, just land him on the ground*/
+			else
+			{
+				if(player[1] <= -0.6)
+				{
+					onPlatform = 0;
+					isJumping = 0;
+				}
+			}
 	}
 }
 
 void jump(float delta_seconds)
-
 {
 	/*i don't freakin know*/
 	//jumping = 0;
@@ -647,7 +766,7 @@ void display()
 	drawEnemies();
 	moveCamera();
 	/*PERFORM BOUNDARY TESTING*/
-	boundaryTests();
+	//boundaryTests();
     /*PRINT SCORES AND DIRECTIONS TO SCREEN*/
 	printToScreen();
 
@@ -660,6 +779,16 @@ void reset(void)
 	powerup_enabled = 0;
 	player[0] = 1.1f;
 	player[1] = -0.6f;
+
+	//reset all the enemies
+	AI_pos[0][0] = 5.0f;
+	AI_pos[1][0] = 14.0f;
+	AI_pos[2][0] = 15.0f;
+	AI_pos[3][0] = 20.0f;
+	AI_pos[4][0] = 28.0f;
+
+	for(int i = 0; i < 5; i++)
+		AI_dir[i] = LEFT;
 }
 
 /*change the angle when a collision occurs*/
@@ -711,6 +840,7 @@ void idle(void)
 
 	smoothMoves(delta_seconds);
 	AI(delta_seconds);
+	boundaryTests(delta_seconds);
 //	if(jumping == 1)
 //		jump(delta_seconds);
 
