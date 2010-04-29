@@ -48,7 +48,7 @@ static int win = 0;
 #define PI 3.1415926535897932384
 #define LEFT 0
 #define RIGHT 1
-#define JUMPHEIGHT 0.75
+#define JUMPHEIGHT 0.8
 
 
 /*global variables*/
@@ -64,11 +64,12 @@ float end_game_message[2] = {1.6f, 0.7f};
 float lives[2] = {1.6f, 0.7f}; //number of lives position, initially in the top left of the screen
 float AI_pos[5][2] = {{5.0f, -0.7f}, {14.0f, -0.7f}, {15.0f, -0.7f}, {20.0f, -0.7f}, {28.0f, -0.7f}};		//initial enemy positions
 int AI_dir[5] = {LEFT, LEFT, LEFT, LEFT, LEFT}; //initial enemy movement directions
+bool AI_killed[5] = {0, 0, 0, 0, 0};	//keep track of if enemies were killed so we can animate their death
 float angle = 0.0;						//angle of the projectile between the crosshairs and the player
 float overallTime = 0.0f;				//keep track of overall time elapsed for various functions
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
-bool isJumping = 0, dir = 0, onPlatform = 0;				//direction determined by 0 (left) and 1 (right)
+bool isJumping = 0, isFalling = 0, dir = 0, onPlatform = 0, fallingInHole = 0;				//direction determined by 0 (left) and 1 (right)
 
 int channel = -1;
 Mix_Chunk* hit = NULL;
@@ -180,26 +181,22 @@ void drawScene(void)
 		glVertex3f(0.0f, -1.0f, 0.0f);
 		glVertex3f(5.0f, -1.0f, 0.0f);
 		glVertex3f(5.0f, -0.8f, 0.0f);
-	glEnd();
-	glBegin(GL_QUADS);
+
 		glVertex3f(5.5f, -0.8f, 0.0f);
 		glVertex3f(5.5f, -1.0f, 0.0f);
 		glVertex3f(12.0f, -1.0f, 0.0f);
 		glVertex3f(12.0f, -0.8f, 0.0f);
-	glEnd();
-	glBegin(GL_QUADS);
+
 		glVertex3f(12.6f, -0.8f, 0.0f);
 		glVertex3f(12.6f, -1.0f, 0.0f);
 		glVertex3f(22.0f, -1.0f, 0.0f);
 		glVertex3f(22.0f, -0.8f, 0.0f);
-	glEnd();
-	glBegin(GL_QUADS);
+
 		glVertex3f(22.5f, -0.8f, 0.0f);
 		glVertex3f(22.5f, -1.0f, 0.0f);
 		glVertex3f(31.0f, -1.0f, 0.0f);
 		glVertex3f(31.0f, -0.8f, 0.0f);
-	glEnd();
-	glBegin(GL_QUADS);
+
 		glVertex3f(31.5f, -0.8f, 0.0f);
 		glVertex3f(31.5f, -1.0f, 0.0f);
 		glVertex3f(40.0f, -1.0f, 0.0f);
@@ -289,30 +286,40 @@ void drawEnemies(void)
 {
 	glColor3f(0.6f, 0.6f, 0.6f);
 	glBegin(GL_QUADS);
+	if(AI_killed[0] == 0) {
 		glVertex3f(AI_pos[0][0] + 0.05, AI_pos[0][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[0][0] - 0.05, AI_pos[0][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[0][0] - 0.05, AI_pos[0][1] - 0.1, 0.0f);
 		glVertex3f(AI_pos[0][0] + 0.05, AI_pos[0][1] - 0.1, 0.0f);
+	}
 
+	if(AI_killed[1] == 0) {
 		glVertex3f(AI_pos[1][0] + 0.05, AI_pos[1][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[1][0] - 0.05, AI_pos[1][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[1][0] - 0.05, AI_pos[1][1] - 0.1, 0.0f);
 		glVertex3f(AI_pos[1][0] + 0.05, AI_pos[1][1] - 0.1, 0.0f);
+	}
 
+	if(AI_killed[2] == 0) {
 		glVertex3f(AI_pos[2][0] + 0.05, AI_pos[2][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[2][0] - 0.05, AI_pos[2][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[2][0] - 0.05, AI_pos[2][1] - 0.1, 0.0f);
 		glVertex3f(AI_pos[2][0] + 0.05, AI_pos[2][1] - 0.1, 0.0f);
+	}
 
+	if(AI_killed[3] == 0) {
 		glVertex3f(AI_pos[3][0] + 0.05, AI_pos[3][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[3][0] - 0.05, AI_pos[3][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[3][0] - 0.05, AI_pos[3][1] - 0.1, 0.0f);
 		glVertex3f(AI_pos[3][0] + 0.05, AI_pos[3][1] - 0.1, 0.0f);
+	}
 
+	if(AI_killed[4] == 0) {
 		glVertex3f(AI_pos[4][0] + 0.05, AI_pos[4][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[4][0] - 0.05, AI_pos[4][1] + 0.1, 0.0f);
 		glVertex3f(AI_pos[4][0] - 0.05, AI_pos[4][1] - 0.1, 0.0f);
 		glVertex3f(AI_pos[4][0] + 0.05, AI_pos[4][1] - 0.1, 0.0f);
+	}
 	glEnd();
 		
 }
@@ -405,8 +412,6 @@ void AI(float delta_seconds)
 /*boundary testing for various aspects of the game as defined below*/
 void boundaryTests(float delta_seconds)
 {
-	printf("isJumping = %d\n", isJumping);
-
 	if((player[1]< -1)) //if player falls down a hole
 		playerKilled();
 
@@ -424,16 +429,38 @@ void boundaryTests(float delta_seconds)
 		//fall animation
 		player_vel = 0;
 		player[1] -= delta_seconds;
+		if(player[1] < -0.6)
+			fallingInHole = 1;
 	}
 
-	/*player-object collision detection*/
-	//first block
-	if(player[0] > 10.0 && player[0] < 10.2 && isJumping == 0 && dir == 1)
+	/*player-object side collision detection*/
+	//object 1
+	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
 		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && isJumping == 0 && dir == 0)
+	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
 		player[0] = 12.0;
-
-	
+	/*NEED TO CHANGE COORDS FOR THESE, THEN UNCOMMENT
+	//object 2
+	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
+		player[0] = 10.0;
+	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
+		player[0] = 12.0;
+	//object 3
+	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
+		player[0] = 10.0;
+	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
+		player[0] = 12.0;
+	//object 4
+	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
+		player[0] = 10.0;
+	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
+		player[0] = 12.0;
+	//object 5
+	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
+		player[0] = 10.0;
+	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
+		player[0] = 12.0;
+	*/
 }
 
 void playerKilled()//decrement lives/remove special items/whatever else
@@ -572,10 +599,6 @@ void moveCamera(void)
 /*generate smooth keyboard-based movement*/
 void smoothMoves(float delta_seconds)
 {
-	if(player[1] > -0.6 && onPlatform == 0 && isJumping == 0)
-			player[1] -= delta_seconds;
-		if(player[1] <= -0.6)
-			currentPlayerHeight = player[1];
 	if ( SpecialDown[GLUT_KEY_RIGHT] ) 
 	{
 		dir = 1;
@@ -597,16 +620,23 @@ void smoothMoves(float delta_seconds)
 	/*FIGURE OUT JUMPING*/
 	if( SpecialDown[GLUT_KEY_UP] )
 	{
-		if(isJumping == 0)
-			currentPlayerHeight = player[1];
-		//if(isJumping == 0) {
-			isJumping = 1;
-			if(player_vel < 1.0)
-				player_vel += 2 * delta_seconds; //allows jumping to happen while running, need to keep in here
-			if(player[1] <= (currentPlayerHeight + JUMPHEIGHT))//if we make this an if statement it could work with some tweaking
-				player[1] += delta_seconds;
-		//}
-
+		if(isFalling == 0) {
+			if(isJumping == 0)
+				currentPlayerHeight = player[1];
+			if(fallingInHole == 0) {
+				isJumping = 1;
+				if(player_vel < 1.0)
+					player_vel += 2 * delta_seconds; //allows jumping to happen while running, need to keep in here
+				if(player[1] <= (currentPlayerHeight + JUMPHEIGHT))//if we make this an if statement it could work with some tweaking
+					player[1] += 1.4 * delta_seconds;
+				else
+					isFalling = 1;
+			}
+		}
+		else {
+			if(player[1] > -0.6)
+				player[1] -= 1.4 * delta_seconds;
+		}
 	}
 	
 	if(!SpecialDown[GLUT_KEY_RIGHT] && dir == 1)//player was moving right then stopped
@@ -636,17 +666,20 @@ void smoothMoves(float delta_seconds)
 		//when landing on blocks, remember to land player[0] 0.2 above the top
 		//of the blocks since player is 0.4 units tall and player[0] is measured from his center
 
-			player[1] -= delta_seconds;
+			isFalling = 1;
+			player[1] -= 1.4 * delta_seconds;
 
 			/*checks that see if the player is falling on an object*/
 			//object 1
-			if(player[0] > 10.0 && player[0] < 12.0 && player[1] > -0.34)
+			if(player[0] > 10.0 && player[0] < 12.0 && player[1] > -0.37)
 			{
 				if(player[1] <= -0.35)
 				{
+					printf("got here\n");
+					isJumping = 0;
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
-					isJumping = 0;
+					isFalling = 0;
 				}
 			}
 			//object 2
@@ -657,6 +690,7 @@ void smoothMoves(float delta_seconds)
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
+					isFalling = 0;
 				}
 			}
 			//object 3
@@ -667,6 +701,7 @@ void smoothMoves(float delta_seconds)
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
+					isFalling = 0;
 				}
 			}
 			//object 4
@@ -677,6 +712,7 @@ void smoothMoves(float delta_seconds)
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
+					isFalling = 0;
 				}
 			}
 
@@ -684,26 +720,30 @@ void smoothMoves(float delta_seconds)
 			//platform 1
 			else if(player[0] > 4.0 && player[0] < 4.5)
 			{
-				if(fabs(player[1] - 0.1) < 0.01)
+				if(fabs(player[1] - 0.1) < 0.02)
 				{
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
+					isFalling = 0;
 				}
 				else
 				{
 					onPlatform = 0;
-					if(player[1] <= -0.6)
+					if(player[1] <= -0.6) {
 						isJumping = 0;
+						isFalling = 0;
+					}
 				}
 			}
 			//platform 2
 			else if(player[0] > 4.5 && player[0] < 5.0)
 			{
-				if(fabs(player[1] - 0.6) < 0.01)
+				if(fabs(player[1] - 0.6) < 0.02)
 				{
 					currentPlayerHeight = player[1];
 					isJumping = 0;
+					isFalling = 0;
 				}
 				else
 				{
@@ -711,16 +751,18 @@ void smoothMoves(float delta_seconds)
 					{
 						onPlatform = 0;
 						isJumping = 0;
+						isFalling = 0;
 					}
 				}
 			}
 			//platform 3
 			else if(player[0] > 5.5 && player[0] < 6.0)
 			{
-				if(fabs(player[1] - 0.1) < 0.01)
+				if(fabs(player[1] - 0.1) < 0.02)
 				{
 					currentPlayerHeight = player[1];
 					isJumping = 0;
+					isFalling = 0;
 				}
 				else
 				{
@@ -729,9 +771,43 @@ void smoothMoves(float delta_seconds)
 					{
 						onPlatform = 0;
 						isJumping = 0;
+						isFalling = 0;
 					}
 				}
-			}			
+			}	
+			
+			/*if the player is above an enemy, kill the enemy*/
+			//enemy 1
+			else if(fabs(player[0] - AI_pos[0][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
+			{
+				AI_killed[0] = 1;
+				AI_pos[0][0] = 0.0;//so the player can't run into a dead enemy and die
+			}
+			//enemy 2
+			else if(fabs(player[0] - AI_pos[1][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
+			{
+				AI_killed[1] = 1;
+				AI_pos[1][0] = 0.0;//so the player can't run into a dead enemy and die
+			}
+			//enemy 3
+			else if(fabs(player[0] - AI_pos[2][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
+			{
+				AI_killed[2] = 1;
+				AI_pos[2][0] = 0.0;//so the player can't run into a dead enemy and die
+			}
+			//enemy 4
+			else if(fabs(player[0] - AI_pos[3][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
+			{
+				AI_killed[3] = 1;
+				AI_pos[3][0] = 0.0;//so the player can't run into a dead enemy and die
+			}
+			//enemy 5
+			else if(fabs(player[0] - AI_pos[4][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
+			{
+				AI_killed[4] = 1;
+				AI_pos[4][0] = 0.0;//so the player can't run into a dead enemy and die
+			}
+
 			
 			/*if the player isn't above anything, just land him on the ground*/
 			else
@@ -740,6 +816,7 @@ void smoothMoves(float delta_seconds)
 				{
 					onPlatform = 0;
 					isJumping = 0;
+					isFalling = 0;
 				}
 			}
 	}
@@ -779,6 +856,7 @@ void reset(void)
 	powerup_enabled = 0;
 	player[0] = 1.1f;
 	player[1] = -0.6f;
+	fallingInHole = 0;
 
 	//reset all the enemies
 	AI_pos[0][0] = 5.0f;
@@ -788,7 +866,10 @@ void reset(void)
 	AI_pos[4][0] = 28.0f;
 
 	for(int i = 0; i < 5; i++)
+	{
+		AI_killed[i] = 0;
 		AI_dir[i] = LEFT;
+	}
 }
 
 /*change the angle when a collision occurs*/
