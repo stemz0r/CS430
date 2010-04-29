@@ -476,6 +476,7 @@ void playerKilled()//decrement lives/remove special items/whatever else
 void gameOver()
 {
 	player_lives = 3;
+	p_score = 0;
 	//need to display a message to user saying game is over, then display main menu.
 	end_game_message[0] = camera[0];
     char EndGameMessage[100];
@@ -782,30 +783,35 @@ void smoothMoves(float delta_seconds)
 			{
 				AI_killed[0] = 1;
 				AI_pos[0][0] = 0.0;//so the player can't run into a dead enemy and die
+				p_score += 100;
 			}
 			//enemy 2
 			else if(fabs(player[0] - AI_pos[1][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
 			{
 				AI_killed[1] = 1;
 				AI_pos[1][0] = 0.0;//so the player can't run into a dead enemy and die
+				p_score += 100;
 			}
 			//enemy 3
 			else if(fabs(player[0] - AI_pos[2][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
 			{
 				AI_killed[2] = 1;
 				AI_pos[2][0] = 0.0;//so the player can't run into a dead enemy and die
+				p_score += 100;
 			}
 			//enemy 4
 			else if(fabs(player[0] - AI_pos[3][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
 			{
 				AI_killed[3] = 1;
 				AI_pos[3][0] = 0.0;//so the player can't run into a dead enemy and die
+				p_score += 100;
 			}
 			//enemy 5
 			else if(fabs(player[0] - AI_pos[4][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
 			{
 				AI_killed[4] = 1;
 				AI_pos[4][0] = 0.0;//so the player can't run into a dead enemy and die
+				p_score += 100;
 			}
 
 			
