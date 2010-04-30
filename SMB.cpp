@@ -42,6 +42,7 @@ void newAngle(float, int);
 void jump(float delta_seconds);
 void playerKilled(void);
 void gameOver(void);
+void levelComplete(void);
 
 static int win = 0;
 
@@ -70,6 +71,8 @@ float overallTime = 0.0f;				//keep track of overall time elapsed for various fu
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
 bool isJumping = 0, isFalling = 0, dir = 0, onPlatform = 0, fallingInHole = 0;				//direction determined by 0 (left) and 1 (right)
+bool endoflevel = 0,endoflevelproceed = 0;
+
 
 int channel = -1;
 Mix_Chunk* hit = NULL;
@@ -350,6 +353,20 @@ void drawObjects(void)
 		glVertex3f(34.0f, -0.55f, 0.0f);
 		glVertex3f(32.0f, -0.55f, 0.0f);
 	glEnd();
+
+			//this is the end flag
+		
+}
+/*draw the ending stuff */
+void drawEnding(void)
+{
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_QUADS);
+	glVertex3f(39.9f, 0.1f, 0.0f);
+		glVertex3f(39.9f, -1.0f, 0.0f);
+		glVertex3f(40.0f, -1.0f, 0.0f);
+		glVertex3f(40.0f, 0.1f, 0.0f);
+	glEnd();
 }
 
 /*render the enemies*/
@@ -525,22 +542,32 @@ void boundaryTests(float delta_seconds)
 		player[0] = 10.0;
 	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
 		player[0] = 12.0;
+
+	if(player[0] > 39.9 && player[0] < 40.1 && dir == 1)
+		//gameOver();
+		levelComplete();
+
+
+
 	/*NEED TO CHANGE COORDS FOR THESE, THEN UNCOMMENT
 	//object 2
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
+	if(player[0] > 18.0 && player[0] < 18.2 && player[1] < -0.33 && dir == 1)
+		player[0] = 18.0;
+	if(player[0] < 19.0 && player[0] > 18.8 && player[1] < -0.33 && dir == 0)
 		player[0] = 12.0;
+
 	//object 3
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 12.0;
+	if(player[0] > 25.0 && player[0] < 25.2 && player[1] < -0.33 && dir == 1)
+		player[0] = 25.0;
+	if(player[0] < 26.0 && player[0] > 26.8 && player[1] < -0.33 && dir == 0)
+		player[0] = 26.0;
+
 	//object 4
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 12.0;
+	if(player[0] > 32.0 && player[0] < 32.2 && player[1] < -0.33 && dir == 1)
+		player[0] = 32.0;
+	if(player[0] < 34.0 && player[0] > 33.8 && player[1] < -0.33 && dir == 0)
+		player[0] = 34.0;
+	
 	//object 5
 	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
 		player[0] = 10.0;
@@ -570,6 +597,11 @@ void gameOver()
     glColor3f(0.0f, 1.0f, 0.0f);
     DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndGameMessage);
 
+}
+
+void levelComplete()
+{
+	endoflevel = 1;
 }
 
 
@@ -661,6 +693,21 @@ void printToScreen(void)
 	sprintf_s(Lives, " Lives : %d", player_lives);
     glColor3f(0.0f, 1.0f, 0.0f);
     DrawText(lives[0], lives[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Lives);
+
+	if(endoflevel == 1){
+		end_game_message[0] = camera[0];
+		player_vel = 0;
+		char EndGameMessage[100];
+		sprintf_s(EndGameMessage, " Level Complete ");
+		glColor3f(0.0f, 1.0f, 0.0f);
+		DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndGameMessage);
+		if(endoflevelproceed == 1)
+		{
+			endoflevel = 0;
+			reset();
+			endoflevelproceed = 0;
+		}
+	}
 }
 
 /*when the player approaches the side of the screen, scroll the camera*/
@@ -930,6 +977,7 @@ void display()
 	/*RENDER OBJECTS IN SCENE*/
 	drawScene();
 	drawPlatforms();
+	drawEnding();
 	drawObjects();
 	drawPlayer();
 	drawEnemies();
@@ -949,6 +997,8 @@ void reset(void)
 	player[0] = 1.1f;
 	player[1] = -0.6f;
 	fallingInHole = 0;
+	p_score = 0;
+	lives = 3;
 
 	//reset all the enemies
 	AI_pos[0][0] = 5.0f;
@@ -1092,7 +1142,8 @@ void keyboard(unsigned char key, int x, int y)
 				isJumping = 1;
 			break;
 		case 13: //ASCII for Enter
-			/*?*/
+			if (endoflevel == 1)
+					endoflevelproceed = 1;
 			break;
 /*//tried to add jumping here, can't figure out how to get delta seconds into this function
 		case 38:
