@@ -76,6 +76,10 @@ Mix_Chunk* hit = NULL;
 Mix_Chunk* miss = NULL;
 GLuint outline;
 GLuint mountaineer;
+GLuint mountaineero;
+GLuint pitt;
+GLuint brick;
+GLuint ground;
 int bX1 = -1;
 int bX2 = 3;
 Mix_Music* music = NULL;
@@ -169,37 +173,58 @@ void drawScene(void)
 
 
 
-	glColor3f(0.0f, 0.0f, 1.0f);
+	//glColor3f(0.0f, 0.0f, 1.0f);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, ground);
 	glBegin(GL_QUADS);
 		/*ground*/
 		//glVertex3f(0.0f, -0.8f, 0.0f);
 		//glVertex3f(0.0f, -1.0f, 0.0f);
 		//glVertex3f(40.0f, -1.0f, 0.0f);
 		//glVertex3f(40.0f, -0.8f, 0.0f);
-
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(0.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(0.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(5.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(5.0f, -0.8f, 0.0f);
 
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(5.5f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(5.5f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(12.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(12.0f, -0.8f, 0.0f);
 
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(12.6f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(12.6f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(22.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(22.0f, -0.8f, 0.0f);
-
+		
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(22.5f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(22.5f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(31.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(31.0f, -0.8f, 0.0f);
-
+		
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(31.5f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(31.5f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(40.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(40.0f, -0.8f, 0.0f);
 	glEnd();
 	
@@ -208,10 +233,33 @@ void drawScene(void)
 /*render the player*/
 void drawPlayer(void)
 {
-	/*player is just a quad for now, will change later*/
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_DST_COLOR, GL_ZERO);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	/*player is just a quad for now, will change later*/
+	
 	//glBlendFunc (GL_ONE, GL_ONE);
 	glBindTexture(GL_TEXTURE_2D, mountaineer);
+	glBegin(GL_QUADS);
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f); //sets background to white
+	glTexCoord2f(0.0f, 1.0f);//Top Left
+		glVertex3f(-0.2f + player[0], -0.2f + player[1], 0.0f);
+	glTexCoord2f(0.0f, 0.0f);     //Bottom Left
+		glVertex3f(-0.2f + player[0], 0.2f + player[1], 0.0f);
+glTexCoord2f(1.0f, 0.0f);//Bottom Right
+		glVertex3f(0.2f + player[0], 0.2f + player[1], 0.0f);
+		glTexCoord2f(1.0f, 1.0f);//Top Right
+		glVertex3f(0.2f + player[0], -0.2f + player[1], 0.0f);
+	glEnd();
+	
+    /*
+	glBlendFunc(GL_ONE, GL_ONE);
+	
+	
+     //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, mountaineero);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(-0.2f + player[0], -0.2f + player[1], 0.0f);
@@ -222,27 +270,45 @@ glTexCoord2f(1.0f, 0.0f);//Bottom Right
 		glTexCoord2f(1.0f, 1.0f);//Top Right
 		glVertex3f(0.2f + player[0], -0.2f + player[1], 0.0f);
 	glEnd();
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);*/
+
+	//glEnable (GL_BLEND); 
+	glDisable(GL_DEPTH_TEST);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 /*draw the platforms in the scene above the ground*/
 void drawPlatforms(void)
 {
-	glColor3f(0.0f, 1.0f, 1.0f);
+	//glColor3f(0.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, brick);
 	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(4.0f, -0.2f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(4.5f, -0.2f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(4.5f, -0.1f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(4.0f, -0.1f, 0.0f);
 
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(5.5f, -0.2f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(6.0f, -0.2f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(6.0f, -0.1f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(5.5f, -0.1f, 0.0f);
 
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(4.5f, 0.4f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(5.0f, 0.4f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(5.0f, 0.3f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(4.5f, 0.3f, 0.0f);
 	glEnd();
 
@@ -257,11 +323,16 @@ void drawPlatforms(void)
 /*draw objects and obstacles in the scene*/
 void drawObjects(void)
 {
-	glColor3f(0.5f, 0.0f, 1.0f);
+	//glColor3f(0.5f, 0.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, brick);
 	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(10.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(12.0f, -0.8f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(12.0f, -0.55f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(10.0f, -0.55f, 0.0f);
 	
 		glVertex3f(18.0f, -0.8f, 0.0f);
@@ -284,12 +355,25 @@ void drawObjects(void)
 /*render the enemies*/
 void drawEnemies(void)
 {
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_DST_COLOR, GL_ZERO);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	/*player is just a quad for now, will change later*/
+	
+	//glBlendFunc (GL_ONE, GL_ONE);
+	glBindTexture(GL_TEXTURE_2D, pitt);
 	glColor3f(0.6f, 0.6f, 0.6f);
 	glBegin(GL_QUADS);
 	if(AI_killed[0] == 0) {
+		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(AI_pos[0][0] + 0.05, AI_pos[0][1] + 0.1, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(AI_pos[0][0] - 0.05, AI_pos[0][1] + 0.1, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(AI_pos[0][0] - 0.05, AI_pos[0][1] - 0.1, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(AI_pos[0][0] + 0.05, AI_pos[0][1] - 0.1, 0.0f);
 	}
 
@@ -321,6 +405,8 @@ void drawEnemies(void)
 		glVertex3f(AI_pos[4][0] + 0.05, AI_pos[4][1] - 0.1, 0.0f);
 	}
 	glEnd();
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 }
 
@@ -1039,7 +1125,13 @@ void InitOpenGL()
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f); //sets background to white
 	glEnable(GL_TEXTURE_2D);
 	outline = LoadTextureRAW("background.raw", 1);
-	mountaineer = LoadTextureRAW("man.raw", 1);
+	//mountaineer = LoadTextureRAW("man.raw", 1);
+	//outline = LoadTextureRAW("background.raw", 1);
+	mountaineer = LoadTextureRAW("man3.raw", 1);
+	pitt = LoadTextureRAW("pitt2.raw", 1);
+	mountaineero = LoadTextureRAW("man4.raw",1);
+	brick = LoadTextureRAW("newbrick2.raw", 1);
+	ground = LoadTextureRAW("groundb.raw", 1);
 	glEnable (GL_BLEND); 
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) != -1)
