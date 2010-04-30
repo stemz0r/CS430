@@ -689,10 +689,10 @@ void printToScreen(void)
     DrawText(score[0], score[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Score);
 
 	lives[0] = camera[0] - 0.8;
-    char Lives[100];
-	sprintf_s(Lives, " Lives : %d", player_lives);
+    char numLives[100];
+	sprintf_s(numLives, " Lives : %d", player_lives);
     glColor3f(0.0f, 1.0f, 0.0f);
-    DrawText(lives[0], lives[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Lives);
+    DrawText(lives[0], lives[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , numLives);
 
 	if(endoflevel == 1){
 		end_game_message[0] = camera[0];
@@ -998,7 +998,7 @@ void reset(void)
 	player[1] = -0.6f;
 	fallingInHole = 0;
 	p_score = 0;
-	lives = 3;
+	player_lives = 3;
 
 	//reset all the enemies
 	AI_pos[0][0] = 5.0f;
