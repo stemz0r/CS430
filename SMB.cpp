@@ -49,7 +49,7 @@ static int win = 0;
 #define PI 3.1415926535897932384
 #define LEFT 0
 #define RIGHT 1
-#define JUMPHEIGHT 0.8
+#define JUMPHEIGHT 0.85
 
 
 /*global variables*/
@@ -538,10 +538,25 @@ void boundaryTests(float delta_seconds)
 
 	/*player-object side collision detection*/
 	//object 1
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
+	if(player[0] > 10.0 && player[0] < 10.1 && player[1] < -0.33 && dir == 1)
 		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
+	if(player[0] < 12.0 && player[0] > 11.9 && player[1] < -0.33 && dir == 0)
 		player[0] = 12.0;
+	//object 2
+	if(player[0] > 18.0 && player[0] < 18.1 && player[1] < -0.13 && dir == 1)
+		player[0] = 18.0;
+	if(player[0] < 19.0 && player[0] > 18.9 && player[1] < -0.13 && dir == 0)
+		player[0] = 19.0;
+	//object 3
+	if(player[0] > 25.0 && player[0] < 25.1 && player[1] < -0.13 && dir == 1)
+		player[0] = 25.0;
+	if(player[0] < 26.0 && player[0] > 25.9 && player[1] < -0.13 && dir == 0)
+		player[0] = 26.0;
+	//object 4
+	if(player[0] > 32.0 && player[0] < 32.1 && player[1] < -0.33 && dir == 1)
+		player[0] = 32.0;
+	if(player[0] < 34.0 && player[0] > 33.9 && player[1] < -0.33 && dir == 0)
+		player[0] = 34.0;
 
 	if(player[0] > 39.9 && player[0] < 40.1 && dir == 1)
 		//gameOver();
@@ -549,31 +564,7 @@ void boundaryTests(float delta_seconds)
 
 
 
-	/*NEED TO CHANGE COORDS FOR THESE, THEN UNCOMMENT
-	//object 2
-	if(player[0] > 18.0 && player[0] < 18.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 18.0;
-	if(player[0] < 19.0 && player[0] > 18.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 12.0;
-
-	//object 3
-	if(player[0] > 25.0 && player[0] < 25.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 25.0;
-	if(player[0] < 26.0 && player[0] > 26.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 26.0;
-
-	//object 4
-	if(player[0] > 32.0 && player[0] < 32.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 32.0;
-	if(player[0] < 34.0 && player[0] > 33.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 34.0;
 	
-	//object 5
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 12.0;
-	*/
 }
 
 void playerKilled()//decrement lives/remove special items/whatever else
@@ -601,6 +592,7 @@ void gameOver()
 
 void levelComplete()
 {
+	p_score += 1000;
 	endoflevel = 1;
 }
 
