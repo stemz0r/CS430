@@ -338,23 +338,36 @@ void drawObjects(void)
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(10.0f, -0.55f, 0.0f);
 	
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(18.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(19.0f, -0.8f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(19.0f, -0.35f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(18.0f, -0.35f, 0.0f);
-
+	
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(25.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(26.0f, -0.8f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(26.0f, -0.35f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(25.0f, -0.35f, 0.0f);
 
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(32.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(34.0f, -0.8f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(34.0f, -0.55f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(32.0f, -0.55f, 0.0f);
 	glEnd();
 
 			//this is the end flag
+		//ff
 		
 }
 /*draw the ending stuff */
