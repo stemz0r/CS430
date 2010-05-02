@@ -801,6 +801,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.35)
 				{
+					player[1] = -0.35;
 					printf("got here\n");
 					isJumping = 0;
 					currentPlayerHeight = player[1];
@@ -813,6 +814,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.15)
 				{
+					player[1] = -0.15;
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
@@ -824,6 +826,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.15)
 				{
+					player[1] = -0.15;
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
@@ -835,6 +838,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.35)
 				{
+					player[1] = -0.35;
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
@@ -846,8 +850,9 @@ void smoothMoves(float delta_seconds)
 			//platform 1
 			else if(player[0] > 4.0 && player[0] < 4.5)
 			{
-				if(fabs(player[1] - 0.1) < 0.02)
+				if(fabs(player[1] - 0.1) < 0.03)
 				{
+					player[1] = 0.1;
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
@@ -865,8 +870,9 @@ void smoothMoves(float delta_seconds)
 			//platform 2
 			else if(player[0] > 4.5 && player[0] < 5.0)
 			{
-				if(fabs(player[1] - 0.6) < 0.02)
+				if(fabs(player[1] - 0.6) < 0.03)
 				{
+					player[1] = 0.6;
 					currentPlayerHeight = player[1];
 					isJumping = 0;
 					isFalling = 0;
@@ -884,8 +890,9 @@ void smoothMoves(float delta_seconds)
 			//platform 3
 			else if(player[0] > 5.5 && player[0] < 6.0)
 			{
-				if(fabs(player[1] - 0.1) < 0.02)
+				if(fabs(player[1] - 0.1) < 0.03)
 				{
+					player[1] = 0.1;
 					currentPlayerHeight = player[1];
 					isJumping = 0;
 					isFalling = 0;
@@ -945,6 +952,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.6)
 				{
+					player[1] = -0.6;
 					onPlatform = 0;
 					isJumping = 0;
 					isFalling = 0;
