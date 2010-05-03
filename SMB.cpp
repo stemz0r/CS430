@@ -42,13 +42,14 @@ void newAngle(float, int);
 void jump(float delta_seconds);
 void playerKilled(void);
 void gameOver(void);
+void levelComplete(void);
 
 static int win = 0;
 
 #define PI 3.1415926535897932384
 #define LEFT 0
 #define RIGHT 1
-#define JUMPHEIGHT 0.8
+#define JUMPHEIGHT 0.85
 
 
 /*global variables*/
@@ -70,12 +71,18 @@ float overallTime = 0.0f;				//keep track of overall time elapsed for various fu
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
 bool isJumping = 0, isFalling = 0, dir = 0, onPlatform = 0, fallingInHole = 0;				//direction determined by 0 (left) and 1 (right)
+bool endoflevel = 0,endoflevelproceed = 0;
+
 
 int channel = -1;
 Mix_Chunk* hit = NULL;
 Mix_Chunk* miss = NULL;
 GLuint outline;
 GLuint mountaineer;
+GLuint mountaineero;
+GLuint pitt;
+GLuint brick;
+GLuint ground;
 int bX1 = -1;
 int bX2 = 3;
 Mix_Music* music = NULL;
@@ -169,37 +176,58 @@ void drawScene(void)
 
 
 
-	glColor3f(0.0f, 0.0f, 1.0f);
+	//glColor3f(0.0f, 0.0f, 1.0f);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, ground);
 	glBegin(GL_QUADS);
 		/*ground*/
 		//glVertex3f(0.0f, -0.8f, 0.0f);
 		//glVertex3f(0.0f, -1.0f, 0.0f);
 		//glVertex3f(40.0f, -1.0f, 0.0f);
 		//glVertex3f(40.0f, -0.8f, 0.0f);
-
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(0.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(0.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(5.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(5.0f, -0.8f, 0.0f);
 
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(5.5f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(5.5f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(12.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(12.0f, -0.8f, 0.0f);
 
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(12.6f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(12.6f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(22.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(22.0f, -0.8f, 0.0f);
-
+		
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(22.5f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(22.5f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(31.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(31.0f, -0.8f, 0.0f);
-
+		
+		glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(31.5f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);//Top Left
 		glVertex3f(31.5f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 0.0f);//Top Left
 		glVertex3f(40.0f, -1.0f, 0.0f);
+		glTexCoord2f(10.0f, 1.0f);//Top Left
 		glVertex3f(40.0f, -0.8f, 0.0f);
 	glEnd();
 	
@@ -208,10 +236,33 @@ void drawScene(void)
 /*render the player*/
 void drawPlayer(void)
 {
-	/*player is just a quad for now, will change later*/
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_DST_COLOR, GL_ZERO);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	/*player is just a quad for now, will change later*/
+	
 	//glBlendFunc (GL_ONE, GL_ONE);
 	glBindTexture(GL_TEXTURE_2D, mountaineer);
+	glBegin(GL_QUADS);
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f); //sets background to white
+	glTexCoord2f(0.0f, 1.0f);//Top Left
+		glVertex3f(-0.2f + player[0], -0.2f + player[1], 0.0f);
+	glTexCoord2f(0.0f, 0.0f);     //Bottom Left
+		glVertex3f(-0.2f + player[0], 0.2f + player[1], 0.0f);
+glTexCoord2f(1.0f, 0.0f);//Bottom Right
+		glVertex3f(0.2f + player[0], 0.2f + player[1], 0.0f);
+		glTexCoord2f(1.0f, 1.0f);//Top Right
+		glVertex3f(0.2f + player[0], -0.2f + player[1], 0.0f);
+	glEnd();
+	
+    /*
+	glBlendFunc(GL_ONE, GL_ONE);
+	
+	
+     //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, mountaineero);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(-0.2f + player[0], -0.2f + player[1], 0.0f);
@@ -222,27 +273,45 @@ glTexCoord2f(1.0f, 0.0f);//Bottom Right
 		glTexCoord2f(1.0f, 1.0f);//Top Right
 		glVertex3f(0.2f + player[0], -0.2f + player[1], 0.0f);
 	glEnd();
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);*/
+
+	//glEnable (GL_BLEND); 
+	glDisable(GL_DEPTH_TEST);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 /*draw the platforms in the scene above the ground*/
 void drawPlatforms(void)
 {
-	glColor3f(0.0f, 1.0f, 1.0f);
+	//glColor3f(0.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, brick);
 	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(4.0f, -0.2f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(4.5f, -0.2f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(4.5f, -0.1f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(4.0f, -0.1f, 0.0f);
 
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(5.5f, -0.2f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(6.0f, -0.2f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(6.0f, -0.1f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(5.5f, -0.1f, 0.0f);
 
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(4.5f, 0.4f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(5.0f, 0.4f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(5.0f, 0.3f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(4.5f, 0.3f, 0.0f);
 	glEnd();
 
@@ -257,39 +326,84 @@ void drawPlatforms(void)
 /*draw objects and obstacles in the scene*/
 void drawObjects(void)
 {
-	glColor3f(0.5f, 0.0f, 1.0f);
+	//glColor3f(0.5f, 0.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, brick);
 	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(10.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(12.0f, -0.8f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(12.0f, -0.55f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(10.0f, -0.55f, 0.0f);
 	
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(18.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(19.0f, -0.8f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(19.0f, -0.35f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(18.0f, -0.35f, 0.0f);
-
+	
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(25.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(26.0f, -0.8f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(26.0f, -0.35f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(25.0f, -0.35f, 0.0f);
 
+		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(32.0f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(34.0f, -0.8f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(34.0f, -0.55f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(32.0f, -0.55f, 0.0f);
+	glEnd();
+
+			//this is the end flag
+		//ff
+		
+}
+/*draw the ending stuff */
+void drawEnding(void)
+{
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_QUADS);
+	glVertex3f(39.9f, 0.1f, 0.0f);
+		glVertex3f(39.9f, -1.0f, 0.0f);
+		glVertex3f(40.0f, -1.0f, 0.0f);
+		glVertex3f(40.0f, 0.1f, 0.0f);
 	glEnd();
 }
 
 /*render the enemies*/
 void drawEnemies(void)
 {
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_DST_COLOR, GL_ZERO);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	/*player is just a quad for now, will change later*/
+	
+	//glBlendFunc (GL_ONE, GL_ONE);
+	glBindTexture(GL_TEXTURE_2D, pitt);
 	glColor3f(0.6f, 0.6f, 0.6f);
 	glBegin(GL_QUADS);
 	if(AI_killed[0] == 0) {
+		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(AI_pos[0][0] + 0.05, AI_pos[0][1] + 0.1, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(AI_pos[0][0] - 0.05, AI_pos[0][1] + 0.1, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(AI_pos[0][0] - 0.05, AI_pos[0][1] - 0.1, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(AI_pos[0][0] + 0.05, AI_pos[0][1] - 0.1, 0.0f);
 	}
 
@@ -321,6 +435,8 @@ void drawEnemies(void)
 		glVertex3f(AI_pos[4][0] + 0.05, AI_pos[4][1] - 0.1, 0.0f);
 	}
 	glEnd();
+	glDisable(GL_DEPTH_TEST);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 }
 
@@ -435,32 +551,33 @@ void boundaryTests(float delta_seconds)
 
 	/*player-object side collision detection*/
 	//object 1
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
+	if(player[0] > 10.0 && player[0] < 10.1 && player[1] < -0.33 && dir == 1)
 		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
+	if(player[0] < 12.0 && player[0] > 11.9 && player[1] < -0.33 && dir == 0)
 		player[0] = 12.0;
-	/*NEED TO CHANGE COORDS FOR THESE, THEN UNCOMMENT
 	//object 2
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 12.0;
+	if(player[0] > 18.0 && player[0] < 18.1 && player[1] < -0.13 && dir == 1)
+		player[0] = 18.0;
+	if(player[0] < 19.0 && player[0] > 18.9 && player[1] < -0.13 && dir == 0)
+		player[0] = 19.0;
 	//object 3
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 12.0;
+	if(player[0] > 25.0 && player[0] < 25.1 && player[1] < -0.13 && dir == 1)
+		player[0] = 25.0;
+	if(player[0] < 26.0 && player[0] > 25.9 && player[1] < -0.13 && dir == 0)
+		player[0] = 26.0;
 	//object 4
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 12.0;
-	//object 5
-	if(player[0] > 10.0 && player[0] < 10.2 && player[1] < -0.33 && dir == 1)
-		player[0] = 10.0;
-	if(player[0] < 12.0 && player[0] > 11.8 && player[1] < -0.33 && dir == 0)
-		player[0] = 12.0;
-	*/
+	if(player[0] > 32.0 && player[0] < 32.1 && player[1] < -0.33 && dir == 1)
+		player[0] = 32.0;
+	if(player[0] < 34.0 && player[0] > 33.9 && player[1] < -0.33 && dir == 0)
+		player[0] = 34.0;
+
+	if(player[0] > 39.9 && player[0] < 40.1 && dir == 1)
+		//gameOver();
+		levelComplete();
+
+
+
+	
 }
 
 void playerKilled()//decrement lives/remove special items/whatever else
@@ -484,6 +601,12 @@ void gameOver()
     glColor3f(0.0f, 1.0f, 0.0f);
     DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndGameMessage);
 
+}
+
+void levelComplete()
+{
+	p_score += 1000;
+	endoflevel = 1;
 }
 
 
@@ -571,10 +694,25 @@ void printToScreen(void)
     DrawText(score[0], score[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Score);
 
 	lives[0] = camera[0] - 0.8;
-    char Lives[100];
-	sprintf_s(Lives, " Lives : %d", player_lives);
+    char numLives[100];
+	sprintf_s(numLives, " Lives : %d", player_lives);
     glColor3f(0.0f, 1.0f, 0.0f);
-    DrawText(lives[0], lives[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Lives);
+    DrawText(lives[0], lives[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , numLives);
+
+	if(endoflevel == 1){
+		end_game_message[0] = camera[0];
+		player_vel = 0;
+		char EndGameMessage[100];
+		sprintf_s(EndGameMessage, " Level Complete ");
+		glColor3f(0.0f, 1.0f, 0.0f);
+		DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndGameMessage);
+		if(endoflevelproceed == 1)
+		{
+			endoflevel = 0;
+			reset();
+			endoflevelproceed = 0;
+		}
+	}
 }
 
 /*when the player approaches the side of the screen, scroll the camera*/
@@ -676,6 +814,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.35)
 				{
+					player[1] = -0.35;
 					printf("got here\n");
 					isJumping = 0;
 					currentPlayerHeight = player[1];
@@ -688,6 +827,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.15)
 				{
+					player[1] = -0.15;
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
@@ -699,6 +839,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.15)
 				{
+					player[1] = -0.15;
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
@@ -710,6 +851,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.35)
 				{
+					player[1] = -0.35;
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
@@ -721,8 +863,9 @@ void smoothMoves(float delta_seconds)
 			//platform 1
 			else if(player[0] > 4.0 && player[0] < 4.5)
 			{
-				if(fabs(player[1] - 0.1) < 0.02)
+				if(fabs(player[1] - 0.1) < 0.03)
 				{
+					player[1] = 0.1;
 					currentPlayerHeight = player[1];
 					onPlatform = 1;
 					isJumping = 0;
@@ -740,8 +883,9 @@ void smoothMoves(float delta_seconds)
 			//platform 2
 			else if(player[0] > 4.5 && player[0] < 5.0)
 			{
-				if(fabs(player[1] - 0.6) < 0.02)
+				if(fabs(player[1] - 0.6) < 0.03)
 				{
+					player[1] = 0.6;
 					currentPlayerHeight = player[1];
 					isJumping = 0;
 					isFalling = 0;
@@ -759,8 +903,9 @@ void smoothMoves(float delta_seconds)
 			//platform 3
 			else if(player[0] > 5.5 && player[0] < 6.0)
 			{
-				if(fabs(player[1] - 0.1) < 0.02)
+				if(fabs(player[1] - 0.1) < 0.03)
 				{
+					player[1] = 0.1;
 					currentPlayerHeight = player[1];
 					isJumping = 0;
 					isFalling = 0;
@@ -820,6 +965,7 @@ void smoothMoves(float delta_seconds)
 			{
 				if(player[1] <= -0.6)
 				{
+					player[1] = -0.6;
 					onPlatform = 0;
 					isJumping = 0;
 					isFalling = 0;
@@ -844,6 +990,7 @@ void display()
 	/*RENDER OBJECTS IN SCENE*/
 	drawScene();
 	drawPlatforms();
+	drawEnding();
 	drawObjects();
 	drawPlayer();
 	drawEnemies();
@@ -863,6 +1010,8 @@ void reset(void)
 	player[0] = 1.1f;
 	player[1] = -0.6f;
 	fallingInHole = 0;
+	p_score = 0;
+	player_lives = 3;
 
 	//reset all the enemies
 	AI_pos[0][0] = 5.0f;
@@ -1006,7 +1155,8 @@ void keyboard(unsigned char key, int x, int y)
 				isJumping = 1;
 			break;
 		case 13: //ASCII for Enter
-			/*?*/
+			if (endoflevel == 1)
+					endoflevelproceed = 1;
 			break;
 /*//tried to add jumping here, can't figure out how to get delta seconds into this function
 		case 38:
@@ -1039,7 +1189,13 @@ void InitOpenGL()
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f); //sets background to white
 	glEnable(GL_TEXTURE_2D);
 	outline = LoadTextureRAW("background.raw", 1);
-	mountaineer = LoadTextureRAW("man.raw", 1);
+	//mountaineer = LoadTextureRAW("man.raw", 1);
+	//outline = LoadTextureRAW("background.raw", 1);
+	mountaineer = LoadTextureRAW("man3.raw", 1);
+	pitt = LoadTextureRAW("pitt2.raw", 1);
+	mountaineero = LoadTextureRAW("man4.raw",1);
+	brick = LoadTextureRAW("newbrick2.raw", 1);
+	ground = LoadTextureRAW("groundb.raw", 1);
 	glEnable (GL_BLEND); 
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) != -1)
