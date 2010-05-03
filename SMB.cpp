@@ -86,6 +86,7 @@ int p_score = 0;						//player score
 int level = 1;							//level counter
 bool isJumping = 0, isFalling = 0, dir = 0, onPlatform = 0, fallingInHole = 0;				//direction determined by 0 (left) and 1 (right)
 bool endoflevel = 0,endoflevelproceed = 0, gotBonus = 0, didDrawBackground = 0;
+bool gameIsOver = 0, gameIsOverProceed = 0, youWin = 0, youWinProceed = 0;
 
 int channel = -1;
 Mix_Chunk* hit = NULL;
@@ -376,6 +377,44 @@ void drawPlatforms(void)
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(21.5f, -0.1f, 0.0f);
 	}
+	else if(level == 3)
+	{
+		glTexCoord2f(0.0f, 5.0f);
+		glVertex3f(18.0f, -0.2f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(18.5f, -0.2f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(18.5f, -0.1f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
+		glVertex3f(18.0f, -0.1f, 0.0f);
+
+		glTexCoord2f(0.0f, 5.0f);
+		glVertex3f(23.0f, -0.2f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(23.5f, -0.2f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(23.5f, -0.1f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
+		glVertex3f(23.0f, -0.1f, 0.0f);
+
+		glTexCoord2f(0.0f, 5.0f);
+		glVertex3f(23.5f, 0.4f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(24.0f, 0.4f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(24.0f, 0.3f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
+		glVertex3f(23.5f, 0.3f, 0.0f);
+
+		glTexCoord2f(0.0f, 5.0f);
+		glVertex3f(30.5f, -0.2f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(31.0f, -0.2f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(31.0f, -0.1f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
+		glVertex3f(30.5f, -0.1f, 0.0f);
+	}
 
 	glEnd();
 }
@@ -633,7 +672,7 @@ void drawCoins(void)
 			glVertex3f(4.9f, 0.5f, 0.0f);
 		}
 		//end coins for platform 3
-
+	}
 
 			//coins for object 4
 		if(coins_collected[16] == 0) {
@@ -829,7 +868,6 @@ void drawCoins(void)
 			glVertex3f(18.9f, -0.25f, 0.0f);
 		}
 		//end of coins for object 2
-	}
 	
 	if(coins_collected[33] == 0) {
 		glTexCoord2f(0.0f, 5.0f);
@@ -1331,30 +1369,23 @@ void playerKilled()//decrement lives/remove special items/whatever else
 }
 void gameOver()
 {
-	if(level == 2)
-	{
+	if(level == 2) {
 		for(int k = 10; k < 16; k++)
 			coin_pos[k][1] -= 2.0;
 	}
-	player_lives = 3;
-	p_score = 0;
-	level = 1;
-	//need to display a message to user saying game is over, then display main menu.
-	end_game_message[0] = camera[0];
-    char EndGameMessage[100];
-	sprintf_s(EndGameMessage, " Game Over ");
-    glColor3f(0.0f, 1.0f, 0.0f);
-    DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndGameMessage);
-
+	gameIsOver = 1;
 }
 
 void levelComplete()
 {
 	if(gotBonus == 0){
-		p_score += 1000;
+		p_score += 1000;//bonus for completing level
 		gotBonus = 1;
 	}
-	endoflevel = 1;
+	if(level == 3)
+		youWin = 1;
+	else
+		endoflevel = 1;
 }
 
 
@@ -1447,12 +1478,12 @@ void printToScreen(void)
     DrawText(lives[0], lives[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , numLives);
 
 	if(endoflevel == 1){
-		end_game_message[0] = camera[0];
+		end_game_message[0] = camera[0] - 0.5;
 		player_vel = 0;
-		char EndGameMessage[100];
-		sprintf_s(EndGameMessage, " Level Complete ");
+		char EndLevelMessage[100];
+		sprintf_s(EndLevelMessage, " Level Complete! Press Enter to proceed ");
 		glColor3f(0.0f, 1.0f, 0.0f);
-		DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndGameMessage);
+		DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndLevelMessage);
 		if(endoflevelproceed == 1)
 		{
 		
@@ -1463,6 +1494,46 @@ void printToScreen(void)
 			level++;
 			reset();
 			endoflevelproceed = 0;
+		}
+	}
+	if(gameIsOver == 1){
+		end_game_message[0] = camera[0] - 0.5;
+		player_vel = 0;
+		player[1] += 2.0;
+		char EndGameMessage[100];
+		sprintf_s(EndGameMessage, " Game Over. Press Enter to restart ");
+		glColor3f(0.0f, 1.0f, 0.0f);
+		DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndGameMessage);
+		if(gameIsOverProceed == 1)
+		{
+			gameIsOver = 0;
+			gotBonus = 0;
+			player_lives = 3;
+			p_score = 0;
+			level = 1;
+			didDrawBackground = 0;
+			reset();
+			gameIsOverProceed = 0;
+		}
+	}
+	if(youWin == 1){
+		end_game_message[0] = camera[0] - 0.5;
+		player_vel = 0;
+		player[1] += 2.0;
+		char BeatGameMessage[100];
+		sprintf_s(BeatGameMessage, " YOU WIN!!! Press Enter to restart ");
+		glColor3f(0.0f, 1.0f, 0.0f);
+		DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , BeatGameMessage);
+		if(youWinProceed == 1)
+		{
+			gameIsOver = 0;
+			gotBonus = 0;
+			player_lives = 3;
+			p_score = 0;
+			level = 1;
+			didDrawBackground = 0;
+			reset();
+			gameIsOverProceed = 0;
 		}
 	}
 }
@@ -1614,6 +1685,7 @@ void smoothMoves(float delta_seconds)
 			}
 
 			/*checks to see if the player is falling on a platform*/
+			/*level 1 platforms*/
 			//platform 1
 			else if(player[0] > 4.0 && player[0] < 4.5 && level == 1)
 			{
@@ -1675,44 +1747,7 @@ void smoothMoves(float delta_seconds)
 					}
 				}
 			}	
-
-			/*
-				glTexCoord2f(0.0f, 5.0f);
-		glVertex3f(14.0f, -0.2f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(14.5f, -0.2f, 0.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(14.5f, -0.1f, 0.0f);
-		glTexCoord2f(1.0f, 5.0f);
-		glVertex3f(14.0f, -0.1f, 0.0f);
-
-		glTexCoord2f(0.0f, 5.0f);
-		glVertex3f(15.0f, -0.2f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(15.5f, -0.2f, 0.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(15.5f, -0.1f, 0.0f);
-		glTexCoord2f(1.0f, 5.0f);
-		glVertex3f(15.0f, -0.1f, 0.0f);
-
-		glTexCoord2f(0.0f, 5.0f);
-		glVertex3f(14.5f, 0.4f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(15.0f, 0.4f, 0.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(15.0f, 0.3f, 0.0f);
-		glTexCoord2f(1.0f, 5.0f);
-		glVertex3f(14.5f, 0.3f, 0.0f);
-
-		glTexCoord2f(0.0f, 5.0f);
-		glVertex3f(22.0f, -0.2f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(22.5f, -0.2f, 0.0f);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(22.5f, -0.1f, 0.0f);
-		glTexCoord2f(1.0f, 5.0f);
-		glVertex3f(22.0f, -0.1f, 0.0f);
-			*/
+			/*level 2 platforms*/
 			//platform 1
 			else if(player[0] > 14.0 && player[0] < 14.5 && level == 2)
 			{
@@ -1794,7 +1829,89 @@ void smoothMoves(float delta_seconds)
 						isFalling = 0;
 					}
 				}
+			}
+			//platform 1
+			else if(player[0] > 18.0 && player[0] < 18.5 && level == 3)
+			{
+				if(fabs(player[1] - 0.1) < 0.03)
+				{
+					player[1] = 0.1;
+					currentPlayerHeight = player[1];
+					onPlatform = 1;
+					isJumping = 0;
+					isFalling = 0;
+				}
+				else
+				{
+					onPlatform = 0;
+					if(player[1] <= -0.6) {
+						isJumping = 0;
+						isFalling = 0;
+					}
+				}
+			}
+			//platform 2
+			else if(player[0] > 23.5 && player[0] < 24.0 && level == 3)
+			{
+				if(fabs(player[1] - 0.6) < 0.03)
+				{
+					player[1] = 0.6;
+					currentPlayerHeight = player[1];
+					isJumping = 0;
+					isFalling = 0;
+				}
+				else
+				{
+					if(player[1] <= -0.6)
+					{
+						onPlatform = 0;
+						isJumping = 0;
+						isFalling = 0;
+					}
+				}
+			}
+			//platform 3
+			else if(player[0] > 23.0 && player[0] < 23.5 && level == 3)
+			{
+				if(fabs(player[1] - 0.1) < 0.03)
+				{
+					player[1] = 0.1;
+					currentPlayerHeight = player[1];
+					isJumping = 0;
+					isFalling = 0;
+				}
+				else
+				{
+					//isJumping = 1;
+					if(player[1] <= -0.6)
+					{
+						onPlatform = 0;
+						isJumping = 0;
+						isFalling = 0;
+					}
+				}
 			}	
+			//platform 4
+			else if(player[0] > 30.5 && player[0] < 31.0 && level == 3)
+			{
+				if(fabs(player[1] - 0.1) < 0.03)
+				{
+					player[1] = 0.1;
+					currentPlayerHeight = player[1];
+					isJumping = 0;
+					isFalling = 0;
+				}
+				else
+				{
+					//isJumping = 1;
+					if(player[1] <= -0.6)
+					{
+						onPlatform = 0;
+						isJumping = 0;
+						isFalling = 0;
+					}
+				}
+			}
 			
 			/*if the player is above an enemy, kill the enemy*/
 			//enemy 1
@@ -1964,10 +2081,9 @@ void idle(void)
 	smoothMoves(delta_seconds);
 	AI(delta_seconds);
 	boundaryTests(delta_seconds);
-//	if(jumping == 1)
-//		jump(delta_seconds);
 
     glutPostRedisplay();
+
 
 	if(level == 1 && didDrawBackground == 0) 
 	{
@@ -1977,6 +2093,11 @@ void idle(void)
 	else if(level == 2 && didDrawBackground == 0)
 	{
 		outline = LoadTextureRAW("wvustadium.raw", 1);
+		didDrawBackground = 1;
+	}
+	else if(level == 3 && didDrawBackground == 0)
+	{
+		outline = LoadTextureRAW("wvumountainlair.raw", 1);
 		didDrawBackground = 1;
 	}
 }
@@ -2054,7 +2175,11 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 13: //ASCII for Enter
 			if (endoflevel == 1)
-					endoflevelproceed = 1;
+				endoflevelproceed = 1;
+			if(gameIsOver == 1)
+				gameIsOverProceed = 1;
+			if(youWin == 1)
+				youWinProceed = 1;
 			break;
 /*//tried to add jumping here, can't figure out how to get delta seconds into this function
 		case 38:
@@ -2086,12 +2211,6 @@ void InitOpenGL()
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f); //sets background to white
 	glEnable(GL_TEXTURE_2D);
-	//if(level == 1)
-	//	outline = LoadTextureRAW("background.raw", 1);
-	//else if(level == 2)
-	//	outline = LoadTextureRAW("wvustadium.raw", 1);
-	//mountaineer = LoadTextureRAW("man.raw", 1);
-	//outline = LoadTextureRAW("background.raw", 1);
 	mountaineer = LoadTextureRAW("man3.raw", 1);
 	pitt = LoadTextureRAW("pitt2.raw", 1);
 	mountaineero = LoadTextureRAW("man4.raw",1);
