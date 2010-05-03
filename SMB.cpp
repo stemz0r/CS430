@@ -64,14 +64,26 @@ float score[2] = {1.6f, 0.7f};			//score position, initially in top right of fir
 float end_game_message[2] = {1.6f, 0.7f};
 float lives[2] = {1.6f, 0.7f}; //number of lives position, initially in the top left of the screen
 float AI_pos[5][2] = {{5.0f, -0.7f}, {14.0f, -0.7f}, {15.0f, -0.7f}, {20.0f, -0.7f}, {28.0f, -0.7f}};		//initial enemy positions
-int AI_dir[5] = {LEFT, LEFT, LEFT, LEFT, LEFT}; //initial enemy movement directions
-bool AI_killed[5] = {0, 0, 0, 0, 0};	//keep track of if enemies were killed so we can animate their death
+float coin_pos[55][2] = {{0.25f, -0.65f}, {0.45f, -0.65f}, {0.65f, -0.65f}, {0.85f, -0.65f}, {1.05f, -0.65f}, //coins 1-5
+						 {1.25f, -0.65f}, {1.45f, -0.65f}, {1.65f, -0.65f}, {1.85f, -0.65f}, {2.25f, -0.65f}, //6-10
+						 {4.15f, -0.05f}, {4.35f, -0.05f}, {5.65f, -0.05f}, {5.85f, -0.05f}, {4.65f, 0.45f}, //11-15
+						 {4.85f, 0.45f}, {32.25f, -0.5f}, {32.85f, -0.5f}, {33.25f, -0.5f}, {33.65f, -0.5f}, //16-20
+						 {32.65f, -0.5f}, {33.55f, -0.5f}, {25.15f, -0.3f}, {25.45f, -0.3f}, {25.85f, -0.3f}, //21-25
+						 {10.55f, -0.5f}, {11.05f, -0.5f}, {11.55f, -0.5f}, {11.85f, -0.5f}, {18.15f, -0.3f}, //26-30
+						 {18.35f, -0.3f}, {18.65f, -0.3f}, {18.85f, -0.3f}, {19.55f, -0.65f}, {19.45f, -0.65f}, //31-35
+						 {20.45f, -0.65f}, {21.45f, -0.65f}, {22.45f, -0.65f}, {23.45f, -0.65f}, {24.45f, -0.65f}, //36-40
+						 {25.45f, -0.65f}, {26.45f, -0.65f}, {27.45f, -0.65f}, {28.45f, -0.65f}, {29.45f, -0.65f}, //41-45
+						 {30.45f, -0.65f}, {31.45f, -0.65f}, {32.45f, -0.65f}, {33.45f, -0.65f}, {34.45f, -0.65f}, //46-50
+						 {35.45f, -0.65f}, {36.45f, -0.65f}, {37.45f, -0.65f}, {38.45f, -0.65f}, {39.45f, -0.65f}};//51-55
+int AI_dir[5] = {LEFT};					//initial enemy movement directions
+bool AI_killed[5] = {0};				//keep track of if enemies were killed so we can animate their death
+bool coins_collected[55] = {0};			//keep track of if coins were collected
 float angle = 0.0;						//angle of the projectile between the crosshairs and the player
 float overallTime = 0.0f;				//keep track of overall time elapsed for various functions
 int moving = 0;							//used as a boolean variable to determine whether or not the projectile is in motion
 int p_score = 0;						//player score
 bool isJumping = 0, isFalling = 0, dir = 0, onPlatform = 0, fallingInHole = 0;				//direction determined by 0 (left) and 1 (right)
-bool endoflevel = 0,endoflevelproceed = 0;
+bool endoflevel = 0,endoflevelproceed = 0, gotBonus = 0;
 
 
 int channel = -1;
@@ -404,6 +416,7 @@ void drawCoins(void)
 {
 	glBindTexture(GL_TEXTURE_2D, dollar);
 	glBegin(GL_QUADS);
+	if(coins_collected[0] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(0.2f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -412,7 +425,9 @@ void drawCoins(void)
 		glVertex3f(0.3f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(0.3f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[1] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(0.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -421,7 +436,9 @@ void drawCoins(void)
 		glVertex3f(0.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(0.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[2] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(0.6f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -430,7 +447,9 @@ void drawCoins(void)
 		glVertex3f(0.7f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(0.7f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[3] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(0.8f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -439,7 +458,9 @@ void drawCoins(void)
 		glVertex3f(0.9f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(0.9f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[4] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(1.0f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -448,7 +469,9 @@ void drawCoins(void)
 		glVertex3f(1.1f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(1.1f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[5] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(1.2f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -457,7 +480,9 @@ void drawCoins(void)
 		glVertex3f(1.3f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(1.3f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[6] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(1.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -466,7 +491,9 @@ void drawCoins(void)
 		glVertex3f(1.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(1.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[7] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(1.6f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -475,7 +502,9 @@ void drawCoins(void)
 		glVertex3f(1.7f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(1.7f, -0.7f, 0.0f);
+	}
 	
+	if(coins_collected[8] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(1.8f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -484,7 +513,9 @@ void drawCoins(void)
 		glVertex3f(1.9f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(1.9f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[9] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(2.2f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -493,8 +524,10 @@ void drawCoins(void)
 		glVertex3f(2.3f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(2.3f, -0.7f, 0.0f);
+	}
 
 		//coins for platform 1
+	if(coins_collected[10] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(4.1f, -0.1f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -503,7 +536,9 @@ void drawCoins(void)
 		glVertex3f(4.2f, 0.0f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(4.2f, -0.1f, 0.0f);
+	}
 
+	if(coins_collected[11] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(4.3f, -0.1f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -512,9 +547,11 @@ void drawCoins(void)
 		glVertex3f(4.4f, 0.0f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(4.4f, -0.1f, 0.0f);
+	}
 
 		//end of coins for platform 1
 		//coins for platform 2
+	if(coins_collected[12] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(5.6f, -0.1f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -523,7 +560,9 @@ void drawCoins(void)
 		glVertex3f(5.7f, 0.0f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(5.7f, -0.1f, 0.0f);
+	}
 
+	if(coins_collected[13] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(5.8f, -0.1f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -532,10 +571,11 @@ void drawCoins(void)
 		glVertex3f(5.9f, 0.0f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(5.9f, -0.1f, 0.0f);
+	}
 
 		//end of coins for platform 2
 		//coins for platform 3
-
+	if(coins_collected[14] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(4.6f, 0.4f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -544,7 +584,9 @@ void drawCoins(void)
 		glVertex3f(4.7f, 0.5f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(4.7f, 0.4f, 0.0f);
+	}
 
+	if(coins_collected[15] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(4.8f, 0.4f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -553,9 +595,11 @@ void drawCoins(void)
 		glVertex3f(4.9f, 0.5f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(4.9f, 0.4f, 0.0f);
+	}
 		//end coins for platform 3
 
 		//coins for object 4
+	if(coins_collected[16] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(32.2f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -564,7 +608,9 @@ void drawCoins(void)
 		glVertex3f(32.3f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(32.3f, -0.55f, 0.0f);
+	}
 
+	if(coins_collected[17] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(32.8f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -573,7 +619,9 @@ void drawCoins(void)
 		glVertex3f(32.9f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(32.9f, -0.55f, 0.0f);
+	}
 
+	if(coins_collected[18] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(33.2f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -582,7 +630,9 @@ void drawCoins(void)
 		glVertex3f(33.3f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(33.3f, -0.55f, 0.0f);
+	}
 
+	if(coins_collected[19] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(33.6f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -591,7 +641,9 @@ void drawCoins(void)
 		glVertex3f(33.7f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(33.7f, -0.55f, 0.0f);
+	}
 
+	if(coins_collected[20] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(32.6f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -600,7 +652,9 @@ void drawCoins(void)
 		glVertex3f(32.7f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(32.7f, -0.55f, 0.0f);
+	}
 
+	if(coins_collected[21] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(33.5f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -609,9 +663,11 @@ void drawCoins(void)
 		glVertex3f(33.6f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(33.6f, -0.55f, 0.0f);
+	}
 		//end of coins for object 4
 		//coins for object 3
 
+	if(coins_collected[22] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(25.1f, -0.35f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -620,7 +676,9 @@ void drawCoins(void)
 		glVertex3f(25.2f, -0.25f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(25.2f, -0.35f, 0.0f);
+	}
 
+	if(coins_collected[23] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(25.4f, -0.35f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -629,7 +687,9 @@ void drawCoins(void)
 		glVertex3f(25.5f, -0.25f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(25.5f, -0.35f, 0.0f);
+	}
 
+	if(coins_collected[24] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(25.8f, -0.35f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -638,10 +698,11 @@ void drawCoins(void)
 		glVertex3f(25.9f, -0.25f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(25.9f, -0.35f, 0.0f);
+	}
 		//end of coins for object 3
 
 		//coins for object 
-
+	if(coins_collected[25] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(10.5f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -650,7 +711,9 @@ void drawCoins(void)
 		glVertex3f(10.6f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(10.6f, -0.55f, 0.0f);
+	}
 
+	if(coins_collected[26] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(11.0f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -659,7 +722,9 @@ void drawCoins(void)
 		glVertex3f(11.1f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(11.1f, -0.55f, 0.0f);
+	}
 
+	if(coins_collected[27] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(11.5f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -668,7 +733,9 @@ void drawCoins(void)
 		glVertex3f(11.6f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(11.6f, -0.55f, 0.0f);
+	}
 
+	if(coins_collected[28] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(11.8f, -0.55f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -677,10 +744,11 @@ void drawCoins(void)
 		glVertex3f(11.9f, -0.45f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(11.9f, -0.55f, 0.0f);
+	}
 		//end of coins for object 1
 
 		//coins for object 2
-
+	if(coins_collected[29] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(18.1f, -0.35f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -689,7 +757,9 @@ void drawCoins(void)
 		glVertex3f(18.2f, -0.25f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(18.2f, -0.35f, 0.0f);
+	}
 
+	if(coins_collected[30] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(18.3f, -0.35f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -698,7 +768,9 @@ void drawCoins(void)
 		glVertex3f(18.4f, -0.25f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(18.4f, -0.35f, 0.0f);
+	}
 
+	if(coins_collected[31] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(18.6f, -0.35f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -707,7 +779,9 @@ void drawCoins(void)
 		glVertex3f(18.7f, -0.25f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(18.7f, -0.35f, 0.0f);
+	}
 
+	if(coins_collected[32] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(18.8f, -0.35f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -716,7 +790,9 @@ void drawCoins(void)
 		glVertex3f(18.9f, -0.25f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(18.9f, -0.35f, 0.0f);
+	}
 		//end of coins for object 2
+	if(coins_collected[33] == 0) {
 		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(19.5f, -0.8f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -725,9 +801,11 @@ void drawCoins(void)
 		glVertex3f(19.6f, -0.55f, 0.0f);
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(19.6f, -0.55f, 0.0f);
+	}
 
+	if(coins_collected[34] == 0) {
 		glTexCoord2f(0.0f, 5.0f);
-	glTexCoord2f(0.0f, 1.0f);
+		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(19.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(19.4f, -0.6f, 0.0f);
@@ -735,7 +813,9 @@ void drawCoins(void)
 		glVertex3f(19.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(19.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[35] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(20.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -744,7 +824,9 @@ void drawCoins(void)
 		glVertex3f(20.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(20.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[36] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(21.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -753,7 +835,9 @@ void drawCoins(void)
 		glVertex3f(21.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(21.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[37] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(22.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -762,7 +846,9 @@ void drawCoins(void)
 		glVertex3f(22.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(22.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[38] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(23.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -771,7 +857,9 @@ void drawCoins(void)
 		glVertex3f(23.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(23.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[39] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(24.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -780,7 +868,9 @@ void drawCoins(void)
 		glVertex3f(24.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(24.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[40] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(25.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -789,7 +879,9 @@ void drawCoins(void)
 		glVertex3f(25.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(25.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[41] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(26.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -798,7 +890,9 @@ void drawCoins(void)
 		glVertex3f(26.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(26.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[42] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(27.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -807,7 +901,9 @@ void drawCoins(void)
 		glVertex3f(27.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(27.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[43] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(28.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -816,7 +912,9 @@ void drawCoins(void)
 		glVertex3f(28.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(28.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[44] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(29.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -825,7 +923,9 @@ void drawCoins(void)
 		glVertex3f(29.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(29.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[45] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(30.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -834,7 +934,9 @@ void drawCoins(void)
 		glVertex3f(30.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(30.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[46] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(31.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -843,7 +945,9 @@ void drawCoins(void)
 		glVertex3f(31.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(31.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[47] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(32.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -852,7 +956,9 @@ void drawCoins(void)
 		glVertex3f(32.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(32.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[48] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(33.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -861,7 +967,9 @@ void drawCoins(void)
 		glVertex3f(33.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(33.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[49] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(34.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -870,7 +978,9 @@ void drawCoins(void)
 		glVertex3f(34.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(34.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[50] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(35.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -879,7 +989,9 @@ void drawCoins(void)
 		glVertex3f(35.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(35.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[51] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(36.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -888,7 +1000,9 @@ void drawCoins(void)
 		glVertex3f(36.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(36.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[52] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(37.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -897,7 +1011,9 @@ void drawCoins(void)
 		glVertex3f(37.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(37.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[53] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(38.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -906,7 +1022,9 @@ void drawCoins(void)
 		glVertex3f(38.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(38.5f, -0.7f, 0.0f);
+	}
 
+	if(coins_collected[54] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(39.4f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -915,6 +1033,7 @@ void drawCoins(void)
 		glVertex3f(39.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(39.5f, -0.7f, 0.0f);
+	}
 	glEnd();
 		
 }
@@ -1136,6 +1255,19 @@ void boundaryTests(float delta_seconds)
 	if(player[0] < 34.0 && player[0] > 33.9 && player[1] < -0.33 && dir == 0)
 		player[0] = 34.0;
 
+	/*player-coin collision detection*/
+	for(int i = 0; i < 55; i++)
+	{
+		if(fabs(player[0] - coin_pos[i][0]) < 0.02 && fabs(player[1] - coin_pos[i][1]) < 0.15)
+		{
+			coin_pos[i][1] +=  2.0;
+			coins_collected[i] = 1;
+			p_score += 50;
+		}
+	}
+
+
+	/*reached end of level*/
 	if(player[0] > 39.9 && player[0] < 40.1 && dir == 1)
 		//gameOver();
 		levelComplete();
@@ -1171,7 +1303,10 @@ void gameOver()
 
 void levelComplete()
 {
-	p_score += 1000;
+	if(gotBonus == 0){
+		p_score += 1000;
+		gotBonus = 1;
+	}
 	endoflevel = 1;
 }
 
@@ -1274,6 +1409,7 @@ void printToScreen(void)
 		if(endoflevelproceed == 1)
 		{
 			endoflevel = 0;
+			gotBonus = 0;
 			reset();
 			endoflevelproceed = 0;
 		}
@@ -1595,6 +1731,14 @@ void reset(void)
 	{
 		AI_killed[i] = 0;
 		AI_dir[i] = LEFT;
+	}
+
+	for(int j = 0; j < 55; j++)
+	{
+		if(coins_collected[j] == 1)
+			coin_pos[j][1] -= 2.0;
+		coins_collected[j] = 0;
+		
 	}
 }
 
