@@ -255,12 +255,11 @@ void drawScene(void)
 /*render the player*/
 void drawPlayer(void)
 {
+	glPushMatrix();
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	glBlendFunc(GL_DST_COLOR, GL_ZERO);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-	/*player is just a quad for now, will change later*/
 	
 	//glBlendFunc (GL_ONE, GL_ONE);
 	glBindTexture(GL_TEXTURE_2D, mountaineer);
@@ -276,12 +275,13 @@ glTexCoord2f(1.0f, 0.0f);//Bottom Right
 		glVertex3f(0.2f + player[0], -0.2f + player[1], 0.0f);
 	glEnd();
 	
-    /*
+    
+	/*
 	glBlendFunc(GL_ONE, GL_ONE);
 	
 	
      //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glBindTexture(GL_TEXTURE_2D, mountaineero);
+	glBindTexture(GL_TEXTURE_2D, mountaineer);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 1.0f);//Top Left
 		glVertex3f(-0.2f + player[0], -0.2f + player[1], 0.0f);
@@ -293,11 +293,14 @@ glTexCoord2f(1.0f, 0.0f);//Bottom Right
 		glVertex3f(0.2f + player[0], -0.2f + player[1], 0.0f);
 	glEnd();
 	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);*/
+	glDisable(GL_BLEND);
 
 	//glEnable (GL_BLEND); 
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glPopMatrix();
+	*/
 }
 
 /*draw the platforms in the scene above the ground*/
@@ -380,13 +383,13 @@ void drawPlatforms(void)
 	else if(level == 3)
 	{
 		glTexCoord2f(0.0f, 5.0f);
-		glVertex3f(18.0f, -0.2f, 0.0f);
+		glVertex3f(20.0f, -0.2f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(18.5f, -0.2f, 0.0f);
+		glVertex3f(20.5f, -0.2f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(18.5f, -0.1f, 0.0f);
+		glVertex3f(20.5f, -0.1f, 0.0f);
 		glTexCoord2f(1.0f, 5.0f);
-		glVertex3f(18.0f, -0.1f, 0.0f);
+		glVertex3f(20.0f, -0.1f, 0.0f);
 
 		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(23.0f, -0.2f, 0.0f);
@@ -1468,13 +1471,19 @@ void printToScreen(void)
     score[0] = camera[0] + 0.6;
     char Score[100];
 	sprintf_s(Score, " Score : %d", p_score);
-    glColor3f(0.0f, 1.0f, 0.0f);
+	if(level == 3)
+		glColor3f(1.0f, 1.0f, 1.0f);
+	else
+		glColor3f(0.0f, 1.0f, 0.0f);
     DrawText(score[0], score[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , Score);
 
 	lives[0] = camera[0] - 0.8;
     char numLives[100];
 	sprintf_s(numLives, " Lives : %d", player_lives);
-    glColor3f(0.0f, 1.0f, 0.0f);
+	if(level == 3)
+		glColor3f(1.0f, 1.0f, 1.0f);
+	else
+		glColor3f(0.0f, 1.0f, 0.0f);
     DrawText(lives[0], lives[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , numLives);
 
 	if(endoflevel == 1){
@@ -1502,7 +1511,10 @@ void printToScreen(void)
 		player[1] += 2.0;
 		char EndGameMessage[100];
 		sprintf_s(EndGameMessage, " Game Over. Press Enter to restart ");
-		glColor3f(0.0f, 1.0f, 0.0f);
+		if(level == 3)
+			glColor3f(1.0f, 1.0f, 1.0f);
+		else
+			glColor3f(0.0f, 1.0f, 0.0f);
 		DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , EndGameMessage);
 		if(gameIsOverProceed == 1)
 		{
@@ -1522,7 +1534,7 @@ void printToScreen(void)
 		player[1] += 2.0;
 		char BeatGameMessage[100];
 		sprintf_s(BeatGameMessage, " YOU WIN!!! Press Enter to restart ");
-		glColor3f(0.0f, 1.0f, 0.0f);
+		glColor3f(1.0f, 1.0f, 1.0f);
 		DrawText(end_game_message[0], end_game_message[1], 0.0f, GLUT_BITMAP_TIMES_ROMAN_24 , BeatGameMessage);
 		if(youWinProceed == 1)
 		{
@@ -1831,7 +1843,7 @@ void smoothMoves(float delta_seconds)
 				}
 			}
 			//platform 1
-			else if(player[0] > 18.0 && player[0] < 18.5 && level == 3)
+			else if(player[0] > 20.0 && player[0] < 20.5 && level == 3)
 			{
 				if(fabs(player[1] - 0.1) < 0.03)
 				{
@@ -2131,19 +2143,19 @@ void CreateGlutWindow()
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGBA);
 
    /*WINDOW MODE (COMMEND OUT FULLSCREEN MODE AND UNCOMMENT THIS TO USE WINDOW MODE)*/
-   glutInitWindowPosition (5, 5);
-   glutInitWindowSize (800, 600); //changed window size to 1024x768
-   win = glutCreateWindow ("Super Mountaineer Brothers");
+   //glutInitWindowPosition (5, 5);
+   //glutInitWindowSize (800, 600); //changed window size to 1024x768
+   //win = glutCreateWindow ("Super Mountaineer Brothers");
 
    /*FULLSCREEN MODE (COMMENT OUT WINDOW MODE AND UNCOMMENT THIS TO USE FULLSCREEN MODE)*/
- //  glutGameModeString( "1024x600:32@60" ); //the settings for fullscreen mode for netbooks
-	//if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)) 
-	//	glutEnterGameMode();
-	//else
-	//{
-	//	glutGameModeString("1024x768:32@60");//the settings for fullscreen mode for regular displays
-	//	glutEnterGameMode();
-	//}
+    glutGameModeString( "1024x600:32@60" ); //the settings for fullscreen mode for netbooks
+	if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)) 
+		glutEnterGameMode();
+	else
+	{
+		glutGameModeString("1024x768:32@60");//the settings for fullscreen mode for regular displays
+		glutEnterGameMode();
+	}
 		
 	ShowCursor(FALSE); //hides the mouse cursor
 }
