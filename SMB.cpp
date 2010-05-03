@@ -77,7 +77,10 @@ bool endoflevel = 0,endoflevelproceed = 0;
 int channel = -1;
 Mix_Chunk* hit = NULL;
 Mix_Chunk* miss = NULL;
+Mix_Chunk* enemydead = NULL;
+Mix_Chunk* playerdead = NULL;
 GLuint outline;
+GLuint outline2;
 GLuint mountaineer;
 GLuint mountaineero;
 GLuint pitt;
@@ -930,7 +933,7 @@ void drawEnemies(void)
 	
 	//glBlendFunc (GL_ONE, GL_ONE);
 	glBindTexture(GL_TEXTURE_2D, pitt);
-	glColor3f(0.6f, 0.6f, 0.6f);
+	//glColor3f(0.6f, 0.6f, 0.6f);
 	glBegin(GL_QUADS);
 	if(AI_killed[0] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
@@ -1123,6 +1126,7 @@ void playerKilled()//decrement lives/remove special items/whatever else
 		reset();//places character back at origin
 	}else
 		gameOver();
+		Mix_PlayChannel(-1, playerdead, 0) == -1;
 		reset();
 	}
 
@@ -1296,8 +1300,10 @@ void smoothMoves(float delta_seconds)
 	if( SpecialDown[GLUT_KEY_UP] )
 	{
 		if(isFalling == 0) {
-			if(isJumping == 0)
+			if(isJumping == 0){
 				currentPlayerHeight = player[1];
+				Mix_PlayChannel(-1, hit, 0) == -1;
+			}
 			if(fallingInHole == 0) {
 				isJumping = 1;
 				if(player_vel < 1.0)
@@ -1465,6 +1471,7 @@ void smoothMoves(float delta_seconds)
 				AI_killed[0] = 1;
 				AI_pos[0][0] = 0.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
+				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
 			//enemy 2
 			else if(fabs(player[0] - AI_pos[1][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
@@ -1472,6 +1479,7 @@ void smoothMoves(float delta_seconds)
 				AI_killed[1] = 1;
 				AI_pos[1][0] = 0.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
+				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
 			//enemy 3
 			else if(fabs(player[0] - AI_pos[2][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
@@ -1479,6 +1487,7 @@ void smoothMoves(float delta_seconds)
 				AI_killed[2] = 1;
 				AI_pos[2][0] = 0.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
+				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
 			//enemy 4
 			else if(fabs(player[0] - AI_pos[3][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
@@ -1486,6 +1495,7 @@ void smoothMoves(float delta_seconds)
 				AI_killed[3] = 1;
 				AI_pos[3][0] = 0.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
+				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
 			//enemy 5
 			else if(fabs(player[0] - AI_pos[4][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
@@ -1493,6 +1503,7 @@ void smoothMoves(float delta_seconds)
 				AI_killed[4] = 1;
 				AI_pos[4][0] = 0.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
+				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
 
 			
@@ -1743,7 +1754,9 @@ void InitOpenGL()
 		{
 			//return 2;
 		}
-
+		hit = Mix_LoadWAV("s1_a0.wav");
+		enemydead = Mix_LoadWAV("s1_c1.wav");
+		playerdead = Mix_LoadWAV("39.wav");
 		//if(Mix_PlayChannel(-1, effect, 0) == -1)
 		//{
 		//}
