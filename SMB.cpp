@@ -529,278 +529,278 @@ void drawCoins(void)
 		//coins for platform 1
 	if(coins_collected[10] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(4.1f, -0.1f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(4.1f, 0.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(4.1f, 0.1f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(4.2f, 0.0f, 0.0f);
+		glVertex3f(4.2f, 0.1f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(4.2f, -0.1f, 0.0f);
+		glVertex3f(4.2f, 0.0f, 0.0f);
 	}
 
 	if(coins_collected[11] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(4.3f, -0.1f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(4.3f, 0.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(4.3f, 0.1f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(4.4f, 0.0f, 0.0f);
+		glVertex3f(4.4f, 0.1f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(4.4f, -0.1f, 0.0f);
+		glVertex3f(4.4f, 0.0f, 0.0f);
 	}
 
 		//end of coins for platform 1
 		//coins for platform 2
 	if(coins_collected[12] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(5.6f, -0.1f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(5.6f, 0.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(5.6f, 0.1f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(5.7f, 0.0f, 0.0f);
+		glVertex3f(5.7f, 0.1f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(5.7f, -0.1f, 0.0f);
+		glVertex3f(5.7f, 0.0f, 0.0f);
 	}
 
 	if(coins_collected[13] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(5.8f, -0.1f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(5.8f, 0.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(5.8f, 0.1f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(5.9f, 0.0f, 0.0f);
+		glVertex3f(5.9f, 0.1f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(5.9f, -0.1f, 0.0f);
+		glVertex3f(5.9f, 0.0f, 0.0f);
 	}
 
 		//end of coins for platform 2
 		//coins for platform 3
 	if(coins_collected[14] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(4.6f, 0.4f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(4.6f, 0.5f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(4.6f, 0.6f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(4.7f, 0.5f, 0.0f);
+		glVertex3f(4.7f, 0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(4.7f, 0.4f, 0.0f);
+		glVertex3f(4.7f, 0.5f, 0.0f);
 	}
 
 	if(coins_collected[15] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(4.8f, 0.4f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(4.8f, 0.5f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(4.8f, 0.6f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(4.9f, 0.5f, 0.0f);
+		glVertex3f(4.9f, 0.6f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(4.9f, 0.4f, 0.0f);
+		glVertex3f(4.9f, 0.5f, 0.0f);
 	}
 		//end coins for platform 3
 
 		//coins for object 4
 	if(coins_collected[16] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(32.2f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(32.2f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(32.2f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(32.3f, -0.45f, 0.0f);
+		glVertex3f(32.3f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(32.3f, -0.55f, 0.0f);
+		glVertex3f(32.3f, -0.45f, 0.0f);
 	}
 
 	if(coins_collected[17] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(32.8f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(32.8f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(32.8f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(32.9f, -0.45f, 0.0f);
+		glVertex3f(32.9f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(32.9f, -0.55f, 0.0f);
+		glVertex3f(32.9f, -0.45f, 0.0f);
 	}
 
 	if(coins_collected[18] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(33.2f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(33.2f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(33.2f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(33.3f, -0.45f, 0.0f);
+		glVertex3f(33.3f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(33.3f, -0.55f, 0.0f);
+		glVertex3f(33.3f, -0.45f, 0.0f);
 	}
 
 	if(coins_collected[19] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(33.6f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(33.6f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(33.6f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(33.7f, -0.45f, 0.0f);
+		glVertex3f(33.7f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(33.7f, -0.55f, 0.0f);
+		glVertex3f(33.7f, -0.45f, 0.0f);
 	}
 
 	if(coins_collected[20] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(32.6f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(32.6f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(32.6f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(32.7f, -0.45f, 0.0f);
+		glVertex3f(32.7f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(32.7f, -0.55f, 0.0f);
+		glVertex3f(32.7f, -0.45f, 0.0f);
 	}
 
 	if(coins_collected[21] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(33.5f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(33.5f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(33.5f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(33.6f, -0.45f, 0.0f);
+		glVertex3f(33.6f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(33.6f, -0.55f, 0.0f);
+		glVertex3f(33.6f, -0.45f, 0.0f);
 	}
 		//end of coins for object 4
 		//coins for object 3
 
 	if(coins_collected[22] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(25.1f, -0.35f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(25.1f, -0.25f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(25.1f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(25.2f, -0.25f, 0.0f);
+		glVertex3f(25.2f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(25.2f, -0.35f, 0.0f);
+		glVertex3f(25.2f, -0.25f, 0.0f);
 	}
 
 	if(coins_collected[23] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(25.4f, -0.35f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(25.4f, -0.25f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(25.4f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(25.5f, -0.25f, 0.0f);
+		glVertex3f(25.5f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(25.5f, -0.35f, 0.0f);
+		glVertex3f(25.5f, -0.25f, 0.0f);
 	}
 
 	if(coins_collected[24] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(25.8f, -0.35f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(25.8f, -0.25f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(25.8f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(25.9f, -0.25f, 0.0f);
+		glVertex3f(25.9f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(25.9f, -0.35f, 0.0f);
+		glVertex3f(25.9f, -0.25f, 0.0f);
 	}
 		//end of coins for object 3
 
 		//coins for object 
 	if(coins_collected[25] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(10.5f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(10.5f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(10.5f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(10.6f, -0.45f, 0.0f);
+		glVertex3f(10.6f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(10.6f, -0.55f, 0.0f);
+		glVertex3f(10.6f, -0.45f, 0.0f);
 	}
 
 	if(coins_collected[26] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(11.0f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(11.0f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(11.0f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(11.1f, -0.45f, 0.0f);
+		glVertex3f(11.1f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(11.1f, -0.55f, 0.0f);
+		glVertex3f(11.1f, -0.45f, 0.0f);
 	}
 
 	if(coins_collected[27] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(11.5f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(11.5f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(11.5f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(11.6f, -0.45f, 0.0f);
+		glVertex3f(11.6f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(11.6f, -0.55f, 0.0f);
+		glVertex3f(11.6f, -0.45f, 0.0f);
 	}
 
 	if(coins_collected[28] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(11.8f, -0.55f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(11.8f, -0.45f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(11.8f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(11.9f, -0.45f, 0.0f);
+		glVertex3f(11.9f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(11.9f, -0.55f, 0.0f);
+		glVertex3f(11.9f, -0.45f, 0.0f);
 	}
 		//end of coins for object 1
 
 		//coins for object 2
 	if(coins_collected[29] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(18.1f, -0.35f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(18.1f, -0.25f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(18.1f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(18.2f, -0.25f, 0.0f);
+		glVertex3f(18.2f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(18.2f, -0.35f, 0.0f);
+		glVertex3f(18.2f, -0.25f, 0.0f);
 	}
 
 	if(coins_collected[30] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(18.3f, -0.35f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(18.3f, -0.25f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(18.3f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(18.4f, -0.25f, 0.0f);
+		glVertex3f(18.4f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(18.4f, -0.35f, 0.0f);
+		glVertex3f(18.4f, -0.25f, 0.0f);
 	}
 
 	if(coins_collected[31] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(18.6f, -0.35f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(18.6f, -0.25f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(18.6f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(18.7f, -0.25f, 0.0f);
+		glVertex3f(18.7f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(18.7f, -0.35f, 0.0f);
+		glVertex3f(18.7f, -0.25f, 0.0f);
 	}
 
 	if(coins_collected[32] == 0) {
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(18.8f, -0.35f, 0.0f);
-		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(18.8f, -0.25f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(18.8f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(18.9f, -0.25f, 0.0f);
+		glVertex3f(18.9f, -0.15f, 0.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(18.9f, -0.35f, 0.0f);
+		glVertex3f(18.9f, -0.25f, 0.0f);
 	}
 		//end of coins for object 2
 	if(coins_collected[33] == 0) {
 		glTexCoord2f(0.0f, 5.0f);
-		glVertex3f(19.5f, -0.8f, 0.0f);
+		glVertex3f(19.5f, -0.7f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(19.5f, -0.8f, 0.0f);
+		glVertex3f(19.5f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(19.6f, -0.55f, 0.0f);
+		glVertex3f(19.6f, -0.6f, 0.0f);
 		glTexCoord2f(1.0f, 5.0f);
-		glVertex3f(19.6f, -0.55f, 0.0f);
+		glVertex3f(19.6f, -0.7f, 0.0f);
 	}
 
 	if(coins_collected[34] == 0) {
