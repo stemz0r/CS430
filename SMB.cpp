@@ -92,6 +92,7 @@ Mix_Chunk* hit = NULL;
 Mix_Chunk* miss = NULL;
 Mix_Chunk* enemydead = NULL;
 Mix_Chunk* playerdead = NULL;
+Mix_Chunk* gotcoin = NULL;
 GLuint outline;
 GLuint outline2;
 GLuint mountaineer;
@@ -1298,6 +1299,7 @@ void boundaryTests(float delta_seconds)
 	{
 		if(fabs(player[0] - coin_pos[i][0]) < 0.02 && fabs(player[1] - coin_pos[i][1]) < 0.15)
 		{
+			Mix_PlayChannel(-1, gotcoin, 0) == -1;
 			coin_pos[i][1] +=  2.0;
 			coins_collected[i] = 1;
 			p_score += 50;
@@ -2108,6 +2110,7 @@ void InitOpenGL()
 		hit = Mix_LoadWAV("s1_a0.wav");
 		enemydead = Mix_LoadWAV("s1_c1.wav");
 		playerdead = Mix_LoadWAV("39.wav");
+		gotcoin = Mix_LoadWAV("coin.wav");
 		//if(Mix_PlayChannel(-1, effect, 0) == -1)
 		//{
 		//}
