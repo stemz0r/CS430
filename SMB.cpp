@@ -83,6 +83,7 @@ GLuint mountaineero;
 GLuint pitt;
 GLuint brick;
 GLuint ground;
+GLuint dollar;
 int bX1 = -1;
 int bX2 = 3;
 Mix_Music* music = NULL;
@@ -296,6 +297,8 @@ void drawPlatforms(void)
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(4.0f, -0.1f, 0.0f);
 
+		
+
 		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(5.5f, -0.2f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -305,6 +308,8 @@ void drawPlatforms(void)
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(5.5f, -0.1f, 0.0f);
 
+		
+
 		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(4.5f, 0.4f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
@@ -313,6 +318,8 @@ void drawPlatforms(void)
 		glVertex3f(5.0f, 0.3f, 0.0f);
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(4.5f, 0.3f, 0.0f);
+
+		
 	glEnd();
 
 	glPushMatrix();
@@ -337,6 +344,8 @@ void drawObjects(void)
 		glVertex3f(12.0f, -0.55f, 0.0f);
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(10.0f, -0.55f, 0.0f);
+
+		
 	
 		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(18.0f, -0.8f, 0.0f);
@@ -346,6 +355,8 @@ void drawObjects(void)
 		glVertex3f(19.0f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(18.0f, -0.35f, 0.0f);
+
+		
 	
 		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(25.0f, -0.8f, 0.0f);
@@ -355,6 +366,8 @@ void drawObjects(void)
 		glVertex3f(26.0f, -0.35f, 0.0f);
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(25.0f, -0.35f, 0.0f);
+		
+
 
 		glTexCoord2f(0.0f, 5.0f);
 		glVertex3f(32.0f, -0.8f, 0.0f);
@@ -364,6 +377,8 @@ void drawObjects(void)
 		glVertex3f(34.0f, -0.55f, 0.0f);
 		glTexCoord2f(1.0f, 5.0f);
 		glVertex3f(32.0f, -0.55f, 0.0f);
+		
+
 	glEnd();
 
 			//this is the end flag
@@ -381,6 +396,527 @@ void drawEnding(void)
 		glVertex3f(40.0f, 0.1f, 0.0f);
 	glEnd();
 }
+
+void drawCoins(void)
+{
+	glBindTexture(GL_TEXTURE_2D, dollar);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(0.2f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(0.2f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(0.3f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(0.3f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(0.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(0.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(0.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(0.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(0.6f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(0.6f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(0.7f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(0.7f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(0.8f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(0.8f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(0.9f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(0.9f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(1.0f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(1.0f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(1.1f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(1.1f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(1.2f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(1.2f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(1.3f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(1.3f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(1.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(1.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(1.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(1.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(1.6f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(1.6f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(1.7f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(1.7f, -0.7f, 0.0f);
+	
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(1.8f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(1.8f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(1.9f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(1.9f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(2.2f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(2.2f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(2.3f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(2.3f, -0.7f, 0.0f);
+
+		//coins for platform 1
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(4.1f, -0.1f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(4.1f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(4.2f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(4.2f, -0.1f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(4.3f, -0.1f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(4.3f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(4.4f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(4.4f, -0.1f, 0.0f);
+
+		//end of coins for platform 1
+		//coins for platform 2
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(5.6f, -0.1f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(5.6f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(5.7f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(5.7f, -0.1f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(5.8f, -0.1f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(5.8f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(5.9f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(5.9f, -0.1f, 0.0f);
+
+		//end of coins for platform 2
+		//coins for platform 3
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(4.6f, 0.4f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(4.6f, 0.5f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(4.7f, 0.5f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(4.7f, 0.4f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(4.8f, 0.4f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(4.8f, 0.5f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(4.9f, 0.5f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(4.9f, 0.4f, 0.0f);
+		//end coins for platform 3
+
+		//coins for object 4
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(32.2f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(32.2f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(32.3f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(32.3f, -0.55f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(32.8f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(32.8f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(32.9f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(32.9f, -0.55f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(33.2f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(33.2f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(33.3f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(33.3f, -0.55f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(33.6f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(33.6f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(33.7f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(33.7f, -0.55f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(32.6f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(32.6f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(32.7f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(32.7f, -0.55f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(33.5f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(33.5f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(33.6f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(33.6f, -0.55f, 0.0f);
+		//end of coins for object 4
+		//coins for object 3
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(25.1f, -0.35f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(25.1f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(25.2f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(25.2f, -0.35f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(25.4f, -0.35f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(25.4f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(25.5f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(25.5f, -0.35f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(25.8f, -0.35f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(25.8f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(25.9f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(25.9f, -0.35f, 0.0f);
+		//end of coins for object 3
+
+		//coins for object 
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(10.5f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(10.5f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(10.6f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(10.6f, -0.55f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(11.0f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(11.0f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(11.1f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(11.1f, -0.55f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(11.5f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(11.5f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(11.6f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(11.6f, -0.55f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(11.8f, -0.55f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(11.8f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(11.9f, -0.45f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(11.9f, -0.55f, 0.0f);
+		//end of coins for object 1
+
+		//coins for object 2
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(18.1f, -0.35f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(18.1f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(18.2f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(18.2f, -0.35f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(18.3f, -0.35f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(18.3f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(18.4f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(18.4f, -0.35f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(18.6f, -0.35f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(18.6f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(18.7f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(18.7f, -0.35f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(18.8f, -0.35f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(18.8f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(18.9f, -0.25f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(18.9f, -0.35f, 0.0f);
+		//end of coins for object 2
+		glTexCoord2f(0.0f, 5.0f);
+		glVertex3f(19.5f, -0.8f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(19.5f, -0.8f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(19.6f, -0.55f, 0.0f);
+		glTexCoord2f(1.0f, 5.0f);
+		glVertex3f(19.6f, -0.55f, 0.0f);
+
+		glTexCoord2f(0.0f, 5.0f);
+	glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(19.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(19.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(19.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(19.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(20.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(20.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(20.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(20.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(21.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(21.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(21.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(21.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(22.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(22.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(22.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(22.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(23.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(23.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(23.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(23.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(24.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(24.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(24.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(24.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(25.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(25.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(25.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(25.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(26.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(26.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(26.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(26.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(27.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(27.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(27.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(27.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(28.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(28.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(28.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(28.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(29.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(29.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(29.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(29.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(30.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(30.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(30.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(30.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(31.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(31.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(31.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(31.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(32.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(32.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(32.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(32.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(33.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(33.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(33.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(33.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(34.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(34.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(34.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(34.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(35.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(35.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(35.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(35.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(36.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(36.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(36.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(36.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(37.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(37.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(37.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(37.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(38.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(38.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(38.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(38.5f, -0.7f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(39.4f, -0.7f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(39.4f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(39.5f, -0.6f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(39.5f, -0.7f, 0.0f);
+	glEnd();
+		
+}
+
+//}
 
 /*render the enemies*/
 void drawEnemies(void)
@@ -989,6 +1525,7 @@ void display()
 
 	/*RENDER OBJECTS IN SCENE*/
 	drawScene();
+	drawCoins();
 	drawPlatforms();
 	drawEnding();
 	drawObjects();
@@ -1196,6 +1733,7 @@ void InitOpenGL()
 	mountaineero = LoadTextureRAW("man4.raw",1);
 	brick = LoadTextureRAW("newbrick2.raw", 1);
 	ground = LoadTextureRAW("groundb.raw", 1);
+	dollar = LoadTextureRAW("dollar.raw",1);
 	glEnable (GL_BLEND); 
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) != -1)
