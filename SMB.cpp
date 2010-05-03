@@ -983,83 +983,93 @@ void drawEnemies(void)
 void AI(float delta_seconds)
 {
 	//enemy 1
-	if(AI_pos[0][0] >= 1.0 && AI_dir[0] == LEFT)
-		AI_pos[0][0] -= AI_vel * delta_seconds;
-	else if(AI_pos[0][0] < 1.0 && AI_dir[0] == LEFT)
-	{
-		AI_dir[0] = RIGHT;
-		AI_pos[0][0] = 1.0;
-	}
-	else if(AI_pos[0][0] <= 9.95 && AI_dir[0] == RIGHT)
-		AI_pos[0][0] += AI_vel* delta_seconds;
-	else if(AI_pos[0][0] > 9.95 && AI_dir[0] == RIGHT)
-	{
-		AI_dir[0] = LEFT;
-		AI_pos[0][0] = 9.95;
+	if(AI_killed[0] == 0){
+		if(AI_pos[0][0] >= 1.0 && AI_dir[0] == LEFT)
+			AI_pos[0][0] -= AI_vel * delta_seconds;
+		else if(AI_pos[0][0] < 1.0 && AI_dir[0] == LEFT)
+		{
+			AI_dir[0] = RIGHT;
+			AI_pos[0][0] = 1.0;
+		}
+		else if(AI_pos[0][0] <= 9.95 && AI_dir[0] == RIGHT)
+			AI_pos[0][0] += AI_vel* delta_seconds;
+		else if(AI_pos[0][0] > 9.95 && AI_dir[0] == RIGHT)
+		{
+			AI_dir[0] = LEFT;
+			AI_pos[0][0] = 9.95;
+		}
 	}
 
 	//enemy 2
-	if(AI_pos[1][0] >= 12.05 && AI_dir[1] == LEFT)
-		AI_pos[1][0] -= AI_vel * delta_seconds;
-	else if(AI_pos[1][0] < 12.05 && AI_dir[1] == LEFT)
-	{
-		AI_dir[1] = RIGHT;
-		AI_pos[1][0] = 12.05;
-	}
-	else if(AI_pos[1][0] <= 17.95 && AI_dir[1] == RIGHT)
-		AI_pos[1][0] += AI_vel* delta_seconds;
-	else if(AI_pos[1][0] > 17.95 && AI_dir[1] == RIGHT)
-	{
-		AI_dir[1] = LEFT;
-		AI_pos[1][0] = 17.95;
+	if(AI_killed[1] == 0) {
+		if(AI_pos[1][0] >= 12.05 && AI_dir[1] == LEFT)
+			AI_pos[1][0] -= AI_vel * delta_seconds;
+		else if(AI_pos[1][0] < 12.05 && AI_dir[1] == LEFT)
+		{
+			AI_dir[1] = RIGHT;
+			AI_pos[1][0] = 12.05;
+		}
+		else if(AI_pos[1][0] <= 17.95 && AI_dir[1] == RIGHT)
+			AI_pos[1][0] += AI_vel* delta_seconds;
+		else if(AI_pos[1][0] > 17.95 && AI_dir[1] == RIGHT)
+		{
+			AI_dir[1] = LEFT;
+			AI_pos[1][0] = 17.95;
+		}
 	}
 
 	//enemy 3
-	if(AI_pos[2][0] >= 12.05 && AI_dir[2] == LEFT)
-		AI_pos[2][0] -= AI_vel * delta_seconds;
-	else if(AI_pos[2][0] < 12.05 && AI_dir[2] == LEFT)
-	{
-		AI_dir[2] = RIGHT;
-		AI_pos[2][0] = 12.05;
-	}
-	else if(AI_pos[2][0] <= 17.95 && AI_dir[2] == RIGHT)
-		AI_pos[2][0] += AI_vel* delta_seconds;
-	else if(AI_pos[2][0] > 17.95 && AI_dir[2] == RIGHT)
-	{
-		AI_dir[2] = LEFT;
-		AI_pos[2][0] = 17.95;
+	if(AI_killed[2] == 0) {
+		if(AI_pos[2][0] >= 12.05 && AI_dir[2] == LEFT)
+			AI_pos[2][0] -= AI_vel * delta_seconds;
+		else if(AI_pos[2][0] < 12.05 && AI_dir[2] == LEFT)
+		{
+			AI_dir[2] = RIGHT;
+			AI_pos[2][0] = 12.05;
+		}
+		else if(AI_pos[2][0] <= 17.95 && AI_dir[2] == RIGHT)
+			AI_pos[2][0] += AI_vel* delta_seconds;
+		else if(AI_pos[2][0] > 17.95 && AI_dir[2] == RIGHT)
+		{
+			AI_dir[2] = LEFT;
+			AI_pos[2][0] = 17.95;
+		}
 	}
 
 	//enemy 4
-	if(AI_pos[3][0] >= 19.05 && AI_dir[3] == LEFT)
-		AI_pos[3][0] -= AI_vel * delta_seconds;
-	else if(AI_pos[3][0] < 19.05 && AI_dir[3] == LEFT)
-	{
-		AI_dir[3] = RIGHT;
-		AI_pos[3][0] = 19.05;
-	}
-	else if(AI_pos[3][0] <= 24.95 && AI_dir[3] == RIGHT)
-		AI_pos[3][0] += AI_vel* delta_seconds;
-	else if(AI_pos[3][0] > 24.95 && AI_dir[3] == RIGHT)
-	{
-		AI_dir[3] = LEFT;
-		AI_pos[3][0] = 24.95;
+	if(AI_killed[3] == 0) {
+		if(AI_pos[3][0] >= 19.05 && AI_dir[3] == LEFT)
+			AI_pos[3][0] -= AI_vel * delta_seconds;
+		else if(AI_pos[3][0] < 19.05 && AI_dir[3] == LEFT)
+		{
+			AI_dir[3] = RIGHT;
+			AI_pos[3][0] = 19.05;
+		}
+		else if(AI_pos[3][0] <= 24.95 && AI_dir[3] == RIGHT)
+			AI_pos[3][0] += AI_vel* delta_seconds;
+		else if(AI_pos[3][0] > 24.95 && AI_dir[3] == RIGHT)
+		{
+			AI_dir[3] = LEFT;
+			AI_pos[3][0] = 24.95;
+		}
 	}
 
 	//enemy 5
-	if(AI_pos[4][0] >= 26.05 && AI_dir[4] == LEFT)
-		AI_pos[4][0] -= AI_vel * delta_seconds;
-	else if(AI_pos[4][0] < 26.05 && AI_dir[4] == LEFT)
-	{
-		AI_dir[4] = RIGHT;
-		AI_pos[4][0] = 26.05;
-	}
-	else if(AI_pos[4][0] <= 31.95 && AI_dir[4] == RIGHT)
-		AI_pos[4][0] += AI_vel* delta_seconds;
-	else if(AI_pos[4][0] > 31.95 && AI_dir[4] == RIGHT)
-	{
-		AI_dir[4] = LEFT;
-		AI_pos[4][0] = 31.95;
+	if(AI_killed[4] == 0) {
+		if(AI_pos[4][0] >= 26.05 && AI_dir[4] == LEFT)
+			AI_pos[4][0] -= AI_vel * delta_seconds;
+		else if(AI_pos[4][0] < 26.05 && AI_dir[4] == LEFT)
+		{
+			AI_dir[4] = RIGHT;
+			AI_pos[4][0] = 26.05;
+		}
+		else if(AI_pos[4][0] <= 31.95 && AI_dir[4] == RIGHT)
+			AI_pos[4][0] += AI_vel* delta_seconds;
+		else if(AI_pos[4][0] > 31.95 && AI_dir[4] == RIGHT)
+		{
+			AI_dir[4] = LEFT;
+			AI_pos[4][0] = 31.95;
+		}
 	}
 
 }
@@ -1124,12 +1134,12 @@ void playerKilled()//decrement lives/remove special items/whatever else
 	if(player_lives > 0){
 		player_lives--;
 		reset();//places character back at origin
-	}else
+	}else {
 		gameOver();
 		Mix_PlayChannel(-1, playerdead, 0) == -1;
 		reset();
 	}
-
+}
 void gameOver()
 {
 	player_lives = 3;
@@ -1148,7 +1158,6 @@ void levelComplete()
 	p_score += 1000;
 	endoflevel = 1;
 }
-
 
 
 	///*BOUNDARY TESTING (PONG BALL AND COURT)*/
@@ -1469,7 +1478,7 @@ void smoothMoves(float delta_seconds)
 			else if(fabs(player[0] - AI_pos[0][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
 			{
 				AI_killed[0] = 1;
-				AI_pos[0][0] = 0.0;//so the player can't run into a dead enemy and die
+				AI_pos[0][0] = -1.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
 				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
@@ -1477,7 +1486,7 @@ void smoothMoves(float delta_seconds)
 			else if(fabs(player[0] - AI_pos[1][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
 			{
 				AI_killed[1] = 1;
-				AI_pos[1][0] = 0.0;//so the player can't run into a dead enemy and die
+				AI_pos[1][0] = -1.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
 				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
@@ -1485,7 +1494,7 @@ void smoothMoves(float delta_seconds)
 			else if(fabs(player[0] - AI_pos[2][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
 			{
 				AI_killed[2] = 1;
-				AI_pos[2][0] = 0.0;//so the player can't run into a dead enemy and die
+				AI_pos[2][0] = -1.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
 				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
@@ -1493,7 +1502,7 @@ void smoothMoves(float delta_seconds)
 			else if(fabs(player[0] - AI_pos[3][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
 			{
 				AI_killed[3] = 1;
-				AI_pos[3][0] = 0.0;//so the player can't run into a dead enemy and die
+				AI_pos[3][0] = -1.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
 				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
@@ -1501,7 +1510,7 @@ void smoothMoves(float delta_seconds)
 			else if(fabs(player[0] - AI_pos[4][0]) < 0.2 && player[1] > -0.6 && player[1] < -0.5)
 			{
 				AI_killed[4] = 1;
-				AI_pos[4][0] = 0.0;//so the player can't run into a dead enemy and die
+				AI_pos[4][0] = -1.0;//so the player can't run into a dead enemy and die
 				p_score += 100;
 				Mix_PlayChannel(-1, enemydead, 0) == -1;
 			}
@@ -1551,15 +1560,13 @@ void display()
 	glutSwapBuffers();
 }
 
-/*when a point is scored, reset the ball to the origin, reset the ball's velocity, and set the "is ball moving?" variable to false*/
+/*when the player dies or the game ends, reset all the variables*/
 void reset(void)
 {
 	powerup_enabled = 0;
 	player[0] = 1.1f;
 	player[1] = -0.6f;
 	fallingInHole = 0;
-	p_score = 0;
-	player_lives = 3;
 
 	//reset all the enemies
 	AI_pos[0][0] = 5.0f;
