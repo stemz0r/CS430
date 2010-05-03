@@ -947,30 +947,46 @@ void drawEnemies(void)
 	}
 
 	if(AI_killed[1] == 0) {
+		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(AI_pos[1][0] + 0.05, AI_pos[1][1] + 0.1, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(AI_pos[1][0] - 0.05, AI_pos[1][1] + 0.1, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(AI_pos[1][0] - 0.05, AI_pos[1][1] - 0.1, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(AI_pos[1][0] + 0.05, AI_pos[1][1] - 0.1, 0.0f);
 	}
 
 	if(AI_killed[2] == 0) {
+		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(AI_pos[2][0] + 0.05, AI_pos[2][1] + 0.1, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(AI_pos[2][0] - 0.05, AI_pos[2][1] + 0.1, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(AI_pos[2][0] - 0.05, AI_pos[2][1] - 0.1, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(AI_pos[2][0] + 0.05, AI_pos[2][1] - 0.1, 0.0f);
 	}
 
 	if(AI_killed[3] == 0) {
+		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(AI_pos[3][0] + 0.05, AI_pos[3][1] + 0.1, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(AI_pos[3][0] - 0.05, AI_pos[3][1] + 0.1, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(AI_pos[3][0] - 0.05, AI_pos[3][1] - 0.1, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(AI_pos[3][0] + 0.05, AI_pos[3][1] - 0.1, 0.0f);
 	}
 
 	if(AI_killed[4] == 0) {
+		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(AI_pos[4][0] + 0.05, AI_pos[4][1] + 0.1, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex3f(AI_pos[4][0] - 0.05, AI_pos[4][1] + 0.1, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex3f(AI_pos[4][0] - 0.05, AI_pos[4][1] - 0.1, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
 		glVertex3f(AI_pos[4][0] + 0.05, AI_pos[4][1] - 0.1, 0.0f);
 	}
 	glEnd();
